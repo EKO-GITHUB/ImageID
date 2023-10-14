@@ -204,7 +204,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 	}
 
 	openGitLabRepository() {
-		const url = 'https://gitlab.com/MTOCHIEV/viewR';
+		const url = 'https://gitlab.com/MTOCHIEV/imageidangular';
 		window.open(url, '_blank');
 	}
 }
