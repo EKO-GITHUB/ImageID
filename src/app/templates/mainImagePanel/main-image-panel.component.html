@@ -1,0 +1,19 @@
+<p-toast></p-toast>
+<div class="dropzone" dragnanddrop (files)="filesDropped($event)">
+	<div *ngFor="let file of getFiles()">
+		<a (click)="imageClick(file)" pTooltip="Name: {{ file.file.name }}" class="imageHover">
+			<div
+				[ngStyle]="{
+					'background-color': file.selected ? 'white' : 'transparent',
+					width: '105px',
+					height: '105px',
+					display: 'flex',
+					'justify-content': 'center',
+					'align-items': 'center'
+				}"
+			>
+				<img *ngIf="file" [src]="file.url" width="100px" height="100px" />
+			</div>
+		</a>
+	</div>
+</div>

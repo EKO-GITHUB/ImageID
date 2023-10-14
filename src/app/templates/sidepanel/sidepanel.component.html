@@ -1,0 +1,34 @@
+<div class="card">
+	<p-fieldset>
+		<ng-template pTemplate="header">
+			<div class="flex align-items-center text-primary">
+				<span class="pi pi-image"></span>
+				<span class="font-bold"> Image Details</span>
+			</div>
+		</ng-template>
+		<table style="justify-items: center; justify-content: center; display: flex; align-content: center; align-items: center">
+			<tbody>
+				<tr>
+					<td class="tag">File Name</td>
+					<td class="info">{{ fileName }}</td>
+				</tr>
+				<tr>
+					<td class="tag">File Path</td>
+					<td class="info">{{ filePath }}</td>
+				</tr>
+				<tr>
+					<td class="tag">Width</td>
+					<td class="info">{{ width }}</td>
+				</tr>
+				<tr>
+					<td class="tag">Height</td>
+					<td class="info">{{ height }}</td>
+				</tr>
+				<tr>
+					<td class="tag">File Size</td>
+					<td class="info">{{ fileSize }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</p-fieldset>
+</div>
