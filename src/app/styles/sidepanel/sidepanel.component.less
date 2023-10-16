@@ -1,6 +1,6 @@
 :host {
 	display: flex;
-	justify-content: flex-start;
+	justify-content: center;
 	align-items: flex-start;
 	align-content: flex-start;
 	background-color: #00ffa126;
@@ -12,11 +12,12 @@
 	margin-left: 5px;
 	gap: 5px;
 	flex-wrap: wrap;
+	width: 320px;
 }
 
 ::ng-deep .p-fieldset .p-fieldset-legend {
 	padding: 7px;
-	border: 1px solid #dee2e6;
+	border: 3px solid #dee2e6;
 	color: white;
 	background: teal;
 	font-weight: 700;
@@ -45,4 +46,29 @@
 	text-align: left;
 	width: 200px;
 	line-break: anywhere;
+}
+
+.previewContainer {
+	background-color: teal;
+	width: 315px;
+	height: 315px;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	flex-wrap: wrap;
+	border-radius: 5px;
+}
+
+.identifyButtonContainer {
+	background-color: teal;
+	width: 315px;
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+.pButtonNoPadding {
+	padding: 0px;
 }

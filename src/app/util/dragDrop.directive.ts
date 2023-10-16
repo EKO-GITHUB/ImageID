@@ -1,7 +1,9 @@
 import { Directive, HostBinding, HostListener, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { FileHandlerService } from './fileHandler.service';
 
 export interface FileHandle {
+	id: number;
 	file: File;
 	url: SafeUrl;
 	selected: boolean;
@@ -15,7 +17,7 @@ export class DragDirective {
 
 	@HostBinding('style.background') private background = '#eee';
 
-	constructor(private sanitizer: DomSanitizer) {}
+	constructor(private sanitizer: DomSanitizer, private filehandlerService: FileHandlerService) {}
 
 	@HostListener('dragover', ['$event']) public onDragOver(evt: DragEvent) {
 		evt.preventDefault();
@@ -33,13 +35,22 @@ export class DragDirective {
 		evt.preventDefault();
 		evt.stopPropagation();
 		this.background = '#00ffa126';
+		let id: number;
+		if (this.filehandlerService.getFiles().at(-1)) id = this.filehandlerService.getFiles().at(-1)!.id + 1;
+		else id = 1;
 
 		let files: FileHandle[] = [];
 		for (let i = 0; i < evt.dataTransfer!.files.length; i++) {
 			const file = evt.dataTransfer!.files[i];
 			const url = this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(file));
 			const selected: boolean = false;
-			files.push({ file, url, selected });
+			files.push({
+				id,
+				file,
+				url,
+				selected,
+			});
+			id++;
 		}
 		if (files.length > 0) {
 			this.files.emit(files);

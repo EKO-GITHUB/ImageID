@@ -1,7 +1,7 @@
 :host {
 	display: flex;
 	flex-grow: 1;
-	background-color: #00ffa126;
+	background-color: teal;
 	border-radius: 10px;
 	height: 90vh;
 }
@@ -20,13 +20,14 @@
 
 .dropzone {
 	margin: 0;
+	background-color: #00ffa126;
 	border-radius: 10px;
 	padding: 9px;
 	height: 100%;
 	width: 100%;
 	display: flex;
-	gap: 5px;
-	row-gap: 5px;
+	gap: 3px;
+	row-gap: 3px;
 	flex-grow: 1;
 	overflow: auto;
 	flex-wrap: wrap;
@@ -49,4 +50,44 @@
 	padding: 1rem;
 	border-radius: 10px;
 	font-weight: bold;
+}
+
+.listRow {
+	background-color: white;
+	color: black;
+	flex: 1;
+	display: flex;
+	flex-wrap: nowrap;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+
+.listImage {
+	width: 40px;
+	background: white;
+	display: flex;
+	align-content: center;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+.listID {
+	width: 50px;
+}
+.listFileName {
+	flex-grow: 1;
+	width: 300px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+.listFileType {
+	width: 135px;
+}
+.listFilePath {
+	width: 350px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
 }

@@ -8,6 +8,7 @@ import { AboutDialogComponent } from './about-dialog.component';
 import { DocumentationPDFComponent } from './documentation-pdf.component';
 import { FileHandlerService } from '../../util/fileHandler.service';
 import { FileHandle } from '../../util/dragDrop.directive';
+import { VisibilityService } from 'src/app/util/visibilityService.service';
 
 @Component({
 	selector: 'menu',
@@ -19,7 +20,12 @@ export class MenuComponent implements OnInit, OnDestroy {
 	items!: MenuItem[];
 	ref: DynamicDialogRef | undefined;
 
-	constructor(public dialogService: DialogService, public messageService: MessageService, private fileHandlerService: FileHandlerService) {}
+	constructor(
+		public dialogService: DialogService,
+		public messageService: MessageService,
+		private fileHandlerService: FileHandlerService,
+		private visibilityService: VisibilityService
+	) {}
 
 	ngOnInit(): void {
 		this.items = [
@@ -180,18 +186,21 @@ export class MenuComponent implements OnInit, OnDestroy {
 		let viewAsList = this.findMenuItemByLabel('Show as list', this.items);
 		viewAsGallery!.visible = !viewAsGallery?.visible;
 		viewAsList!.visible = !viewAsList?.visible;
+		this.visibilityService.setShowAsGallery(!viewAsGallery!.visible);
 	}
 	toggleImagePreview() {
 		let showImagePreview = this.findMenuItemByLabel('Show image preview', this.items);
 		let hideImagePreview = this.findMenuItemByLabel('Hide image preview', this.items);
 		showImagePreview!.visible = !showImagePreview?.visible;
 		hideImagePreview!.visible = !hideImagePreview?.visible;
+		this.visibilityService.setPreviewVisible(hideImagePreview!.visible);
 	}
 	toggleImageDetails() {
 		let showImageDetails = this.findMenuItemByLabel('Show image details', this.items);
 		let hideImageDetails = this.findMenuItemByLabel('Hide image details', this.items);
 		showImageDetails!.visible = !showImageDetails?.visible;
 		hideImageDetails!.visible = !hideImageDetails?.visible;
+		this.visibilityService.setDetailsVisible(hideImageDetails!.visible);
 	}
 
 	showDocumentationPDF() {
@@ -204,7 +213,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 	}
 
 	openGitLabRepository() {
-		const url = 'https://gitlab.com/MTOCHIEV/viewR';
+		const url = 'https://gitlab.com/MTOCHIEV/imageidangular';
 		window.open(url, '_blank');
 	}
 }

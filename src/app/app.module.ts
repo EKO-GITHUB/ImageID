@@ -108,6 +108,7 @@ import { AboutDialogComponent } from './components/menu/about-dialog.component';
 import { DocumentationPDFComponent } from './components/menu/documentation-pdf.component';
 import { SidebarComponent } from './components/sidepanel/sidepanel.component';
 import { FileHandlerService } from './util/fileHandler.service';
+import { VisibilityService } from './util/visibilityService.service';
 
 @NgModule({
 	imports: [
@@ -217,7 +218,7 @@ import { FileHandlerService } from './util/fileHandler.service';
 		SidebarComponent,
 		DragDirective,
 	],
-	providers: [DialogService, MessageService, FileHandlerService],
+	providers: [DialogService, MessageService, FileHandlerService, VisibilityService],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}

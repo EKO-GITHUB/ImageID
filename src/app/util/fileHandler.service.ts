@@ -6,6 +6,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 @Injectable()
 export class FileHandlerService {
 	files: FileHandle[] = [];
+	fileLastClickedOn!: FileHandle;
 
 	constructor(public messageService: MessageService, private sanitizer: DomSanitizer) {}
 
@@ -46,11 +47,44 @@ export class FileHandlerService {
 	}
 
 	createNewFileHandle(file: File): FileHandle {
+		let id: number;
+		if (this.files.at(-1)) id = this.files.at(-1)!.id + 1;
+		else id = 1;
 		let filehandle: FileHandle = {
+			id: id,
 			file: file,
 			url: this.sanitizer.bypassSecurityTrustUrl(window.URL.createObjectURL(file)),
 			selected: false,
 		};
 		return filehandle;
+	}
+
+	isAnySelected(): boolean {
+		let anySelected: boolean = false;
+		for (let file of this.files) {
+			if (file.selected) anySelected = true;
+		}
+		return anySelected;
+	}
+
+	getNumberOfSelectedFiles(): number {
+		let nrOfSelectedFiles: number = 0;
+		for (let file of this.files) {
+			if (file.selected) nrOfSelectedFiles++;
+		}
+		return nrOfSelectedFiles;
+	}
+
+	setLastClickedOn(fileHandle: FileHandle) {
+		this.fileLastClickedOn = fileHandle;
+	}
+
+	getFileHandleByIndex(index: number): FileHandle | undefined {
+		for (let file of this.files) {
+			if (file.id == index) {
+				return file;
+			}
+		}
+		return undefined;
 	}
 }

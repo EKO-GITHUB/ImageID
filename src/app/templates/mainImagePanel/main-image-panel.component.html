@@ -1,19 +1,47 @@
 <p-toast></p-toast>
 <div class="dropzone" dragnanddrop (files)="filesDropped($event)">
-	<div *ngFor="let file of getFiles()">
-		<a (click)="imageClick(file)" pTooltip="Name: {{ file.file.name }}" class="imageHover">
-			<div
-				[ngStyle]="{
-					'background-color': file.selected ? 'white' : 'transparent',
-					width: '105px',
-					height: '105px',
-					display: 'flex',
-					'justify-content': 'center',
-					'align-items': 'center'
-				}"
-			>
-				<img *ngIf="file" [src]="file.url" width="100px" height="100px" />
-			</div>
-		</a>
+	<div *ngIf="visibilityService.showAsGallery" style="display: flex; flex-wrap: wrap; flex-direction: row; justify-content: flex-start">
+		<div *ngFor="let file of getFiles()">
+			<a (click)="imageClick(file, $event)" pTooltip="Name: {{ file.file.name }}" class="imageHover">
+				<div
+					[ngStyle]="{
+						'background-color': file.selected ? '#6495ED' : 'transparent',
+						width: '110px',
+						height: '110px',
+						display: 'flex',
+						'justify-content': 'center',
+						'align-items': 'center'
+					}"
+				>
+					<img *ngIf="file" [src]="file.url" width="100px" height="100px" />
+				</div>
+			</a>
+		</div>
+	</div>
+	<div *ngIf="!visibilityService.showAsGallery" style="flex-grow: 1">
+		<div *ngFor="let file of getFiles()" style="flex-grow: 1">
+			<a (click)="imageClick(file, $event)" pTooltip="Name: {{ file.file.name }}" class="imageHover">
+				<div
+					[ngStyle]="{
+						display: 'flex',
+						'justify-content': 'center',
+						'align-items': 'center',
+					}"
+				>
+					<div
+						class="listRow"
+						[ngStyle]="{
+						'background-color': file.selected ? '#6495ED' : 'white',
+					}"
+					>
+						<div class="listImage"><p-image src="assets/images/icon_image_30.png"></p-image></div>
+						<div class="listID">{{ file.id }}</div>
+						<div class="listFileName">{{ file.file.name }}</div>
+						<div class="listFileType">{{ file.file.type }}</div>
+						<div class="listFilePath">{{ file.url }}</div>
+					</div>
+				</div>
+			</a>
+		</div>
 	</div>
 </div>
