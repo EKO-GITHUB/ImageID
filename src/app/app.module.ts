@@ -94,7 +94,7 @@ import { CardModule } from 'primeng/card';
 import { BlockUIModule } from 'primeng/blockui';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageService } from 'primeng/api';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { DialogService } from 'primeng/dynamicdialog';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { DragDirective } from './util/dragDrop.directive';
 

@@ -18,9 +18,17 @@
 	cursor: pointer;
 }
 
+.unselectable {
+	user-select: none;
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-o-user-select: none;
+}
+
 .dropzone {
 	margin: 0;
-	background-color: #00ffa126;
+	background-color: white;
 	border-radius: 10px;
 	padding: 9px;
 	height: 100%;
@@ -61,7 +69,6 @@
 	flex-direction: row;
 	align-items: center;
 	justify-content: center;
-	text-align: center;
 }
 
 .listImage {
@@ -77,17 +84,11 @@
 }
 .listFileName {
 	flex-grow: 1;
-	width: 300px;
+	width: 100px;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
 }
 .listFileType {
 	width: 135px;
-}
-.listFilePath {
-	width: 350px;
-	white-space: nowrap;
-	text-overflow: ellipsis;
-	overflow: hidden;
 }

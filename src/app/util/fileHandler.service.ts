@@ -8,6 +8,17 @@ export class FileHandlerService {
 	files: FileHandle[] = [];
 	fileLastClickedOn!: FileHandle;
 
+	selectedFilePreviewURL: SafeUrl = 'assets/images/noImageSelected.png';
+	selectedFileName: string = 'Select a file to show details';
+	selectedFilePath!: string;
+	selectedFileWidth!: string;
+	selectedFileHeight!: string;
+	selectedFileSize!: string;
+	selectedFileSrc!: string;
+
+	identifySelectedButtonDisabled: boolean = true;
+	identifyAllButtonDisabled: boolean = true;
+
 	constructor(public messageService: MessageService, private sanitizer: DomSanitizer) {}
 
 	addFiles(files: FileHandle[]) {
@@ -86,5 +97,13 @@ export class FileHandlerService {
 			}
 		}
 		return undefined;
+	}
+
+	convertBitSizeToText(sizeInBits: number): string {
+		var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+		if (sizeInBits == 0) return 'n/a';
+		let i = Math.floor(Math.log(sizeInBits) / Math.log(1024));
+		if (i == 0) return sizeInBits + ' ' + sizes[i];
+		return (sizeInBits / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
 	}
 }

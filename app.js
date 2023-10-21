@@ -26,6 +26,9 @@ function createWindow() {
 		show: false,
 		webPreferences: {
 			spellcheck: true,
+			nodeIntegration: true,
+			nodeIntegrationInWorker: true,
+			contextIsolation: false,
 		},
 	});
 	appWindow.setBackgroundColor("#116A7B");

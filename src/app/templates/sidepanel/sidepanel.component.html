@@ -1,8 +1,20 @@
-<p-image *ngIf="visibilityService.previewVisible" src="assets/images/noImageSelected.png" alt="previewImage" width="300" height="300"> </p-image>
+<p-image
+	id="imageID_{{ fileHandlerService.selectedFileName }}"
+	*ngIf="visibilityService.previewVisible"
+	[src]="fileHandlerService.selectedFilePreviewURL"
+	alt="previewImage"
+	width="300"
+	height="300"
+>
+</p-image>
 <div class="identifyButtonContainer">
-	<p-button (onClick)="identifySelected()" [style]="{ padding: '0px' }" pRipple>Identify selected images</p-button>
+	<p-button [disabled]="fileHandlerService.identifySelectedButtonDisabled" (onClick)="identifySelected()" [style]="{ padding: '0px' }" pRipple
+		>Identify selected images</p-button
+	>
 	<div style="width: 15px"></div>
-	<p-button (onClick)="identifyAll()" [style]="{ padding: '0px' }" pRipple>Identify all images</p-button>
+	<p-button [disabled]="fileHandlerService.identifyAllButtonDisabled" (onClick)="identifyAll()" [style]="{ padding: '0px' }" pRipple
+		>Identify all images</p-button
+	>
 </div>
 <div class="card" *ngIf="visibilityService.detailsVisible">
 	<p-fieldset>
@@ -16,23 +28,19 @@
 			<tbody>
 				<tr>
 					<td class="tag">File Name</td>
-					<td class="info">{{ fileName }}</td>
-				</tr>
-				<tr>
-					<td class="tag">File Path</td>
-					<td class="info">{{ filePath }}</td>
+					<td class="info">{{ fileHandlerService.selectedFileName }}</td>
 				</tr>
 				<tr>
 					<td class="tag">Width</td>
-					<td class="info">{{ width }}</td>
+					<td class="info">{{ fileHandlerService.selectedFileWidth }}</td>
 				</tr>
 				<tr>
 					<td class="tag">Height</td>
-					<td class="info">{{ height }}</td>
+					<td class="info">{{ fileHandlerService.selectedFileHeight }}</td>
 				</tr>
 				<tr>
 					<td class="tag">File Size</td>
-					<td class="info">{{ fileSize }}</td>
+					<td class="info">{{ fileHandlerService.selectedFileSize }}</td>
 				</tr>
 			</tbody>
 		</table>
