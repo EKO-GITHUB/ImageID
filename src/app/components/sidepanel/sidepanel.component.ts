@@ -4,7 +4,7 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FileHandlerService } from 'src/app/util/fileHandler.service';
 import { VisibilityService } from 'src/app/util/visibilityService.service';
 import { ExportDialogComponent } from './export-dialog.component';
-import { IdentifiedImage, ImageProperties, PageWithMatchingImage, SafeSearch } from 'src/app/styles/sidepanel/identifiedImage.component';
+import { IdentifiedImage, ImageProperties, Landmark, Logo, PageWithMatchingImage, SafeSearch } from 'src/app/styles/sidepanel/identifiedImage.component';
 
 @Component({
 	selector: 'sidepanel',
@@ -48,27 +48,62 @@ export class SidebarComponent {
 						{ type: 'LANDMARK_DETECTION' },
 						{ type: 'LOGO_DETECTION' },
 						{ type: 'OBJECT_LOCALIZATION' },
-						{ type: 'PRODUCT_SEARCH' },
 						{ type: 'SAFE_SEARCH_DETECTION' },
 						{ type: 'TEXT_DETECTION' },
 						{ type: 'WEB_DETECTION' },
 					],
 				};
 				let [results] = await this.client.annotateImage(request);
+				console.log(JSON.stringify(results, null, 4));
 				let imagePropertiesResults = results.imagePropertiesAnnotation;
 				let labelResults = results.labelAnnotations;
 				let landmarkResults = results.landmarkAnnotations;
 				let logoDetectionResults = results.logoAnnotations;
 				let objectLocalizationResults = results.localizedObjectAnnotations;
-				let productSearchResults = results.productSearchResults;
 				let safeSearchResults = results.safeSearchAnnotation;
-				let textResults = results.textAnnotations;
 				let webDetectionResults = results.webDetection;
 
 				//labels
 				let labelDescriptions: string[] = [];
 				labelResults.forEach((label: { score: number; description: string }) => {
 					if (label.score > 0) labelDescriptions.push(label.description);
+				});
+				labelDescriptions = labelDescriptions.filter(this.onlyUnique);
+
+				//landmarks
+				let landMarks: Landmark[] = [];
+				landmarkResults.forEach(
+					(landmark: {
+						locations: {
+							latLng: {
+								latitude: number;
+								longitude: number;
+							};
+						}[];
+						description: any;
+						score: any;
+					}) => {
+						let newLatitude: number = landmark.locations[0].latLng.latitude;
+						let newLongitude: number = landmark.locations[0].latLng.longitude;
+						let newLandmark: Landmark = {
+							description: landmark.description,
+							latitude: newLatitude,
+							longitude: newLongitude,
+							score: landmark.score,
+						};
+						landMarks.push(newLandmark);
+					}
+				);
+				labelDescriptions = labelDescriptions.filter(this.onlyUnique);
+
+				//logos
+				let logos: Logo[] = [];
+				logoDetectionResults.forEach((logo: { description: any; score: any }) => {
+					let newLogo: Logo = {
+						description: logo.description,
+						score: logo.score,
+					};
+					logos.push(newLogo);
 				});
 				labelDescriptions = labelDescriptions.filter(this.onlyUnique);
 
@@ -81,11 +116,27 @@ export class SidebarComponent {
 
 				//safeSearch
 				let safeSearch: SafeSearch[] = [];
-				let safeSearchAdult: SafeSearch = { category: 'adult', rating: safeSearchResults.adult };
-				let safeSearchSpoof: SafeSearch = { category: 'spoof', rating: safeSearchResults.spoof };
-				let safeSearchMedical: SafeSearch = { category: 'medical', rating: safeSearchResults.medical };
-				let safeSearchViolence: SafeSearch = { category: 'violence', rating: safeSearchResults.violence };
-				let safeSearchRacy: SafeSearch = { category: 'racy', rating: safeSearchResults.racy };
+				let safeSearchAdult: SafeSearch = {
+					color: this.getColorForSafeSearchRating(safeSearchResults.adult),
+					category: 'adult',
+					rating: safeSearchResults.adult,
+				};
+				let safeSearchSpoof: SafeSearch = {
+					color: this.getColorForSafeSearchRating(safeSearchResults.spoof),
+					category: 'spoof',
+					rating: safeSearchResults.spoof,
+				};
+				let safeSearchMedical: SafeSearch = {
+					color: this.getColorForSafeSearchRating(safeSearchResults.medical),
+					category: 'medical',
+					rating: safeSearchResults.medical,
+				};
+				let safeSearchViolence: SafeSearch = {
+					color: this.getColorForSafeSearchRating(safeSearchResults.violence),
+					category: 'violence',
+					rating: safeSearchResults.violence,
+				};
+				let safeSearchRacy: SafeSearch = { color: this.getColorForSafeSearchRating(safeSearchResults.racy), category: 'racy', rating: safeSearchResults.racy };
 				safeSearch.push(safeSearchAdult, safeSearchSpoof, safeSearchMedical, safeSearchViolence, safeSearchRacy);
 
 				//image Properties
@@ -106,7 +157,6 @@ export class SidebarComponent {
 				let fullMatchingImages: string[] = [];
 				let partialMatchingImages: string[] = [];
 				let pagesWithMatchingImage: PageWithMatchingImage[] = [];
-				let bestGuess: string;
 				webDetectionResults.webEntities.forEach((entity: { score: number; description: string }) => {
 					if (entity.score > 0) webDetectionDescriptions.push(entity.description);
 				});
@@ -131,20 +181,16 @@ export class SidebarComponent {
 				let identifiedImage: IdentifiedImage = {
 					id: file.id,
 					fileName: file.file.name,
-					landmarks: [],
-					logos: [],
+					landmarks: landMarks,
+					logos: logos,
 					labels: labelDescriptions,
-					texts: [],
 					localizedObjects: localizedObjects,
 					safeSearch: safeSearch,
 					imageProperties: imageProperties,
-					fullTextAnnotation: [],
 					webDetection: webDetectionDescriptions,
 					fullMatchingImages: fullMatchingImages,
 					partialMatchingImages: partialMatchingImages,
 					pagesWithMatchingImage: pagesWithMatchingImage,
-					productSearchResults: [],
-					context: [],
 				};
 
 				this.fileHandlerService.identifiedImages.push(identifiedImage);
@@ -168,7 +214,7 @@ export class SidebarComponent {
 
 	showExportDialog() {
 		this.ref = this.dialogService.open(ExportDialogComponent, {
-			header: 'Export Image Tags',
+			header: '',
 			height: '100%',
 			width: '100%',
 			modal: true,
@@ -192,5 +238,29 @@ export class SidebarComponent {
 		if (a.length == 1) a = '0' + a;
 
 		return '#' + r + g + b + a;
+	}
+
+	getColorForSafeSearchRating(rating: string): string {
+		switch (rating) {
+			case 'UNKNOWN': {
+				return 'black';
+			}
+			case 'VERY_UNLIKELY': {
+				return 'teal';
+			}
+			case 'UNLIKELY': {
+				return '#0095ff';
+			}
+			case 'POSSIBLE': {
+				return '#8900cf';
+			}
+			case 'LIKELY': {
+				return 'orange';
+			}
+			case 'VERY_LIKELY': {
+				return 'red';
+			}
+		}
+		return '';
 	}
 }

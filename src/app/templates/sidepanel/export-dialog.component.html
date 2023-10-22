@@ -1,18 +1,49 @@
 <div class="card flex justify-content-center w-100">
-	<p-accordion [activeIndex]="0">
+	<p-accordion>
 		<p-accordionTab *ngFor="let identifiedImage of fileHandlerService.identifiedImages" [header]="identifiedImage.id + ' ' + identifiedImage.fileName">
-			<p-accordion [activeIndex]="0">
+			<p-accordion>
 				<div *ngIf="identifiedImage.landmarks.length > 0">
 					<p-accordionTab header="Landmarks" class="w-100">
-						<div *ngFor="let landmarks of identifiedImage.landmarks" class="tagDiv">
-							<div>TEST LANDMARK 1</div>
-							<p-button icon="pi pi-trash" severity="danger"></p-button>
-						</div>
+						<p-table [value]="identifiedImage.landmarks" [ngStyle]="{ width: '100%' }">
+							<ng-template pTemplate="header">
+								<tr>
+									<th>Description</th>
+									<th>Latitude</th>
+									<th>Longitude</th>
+									<th>Score</th>
+									<th></th>
+								</tr>
+							</ng-template>
+							<ng-template pTemplate="body" let-landmark>
+								<tr>
+									<td>{{ landmark.description }}</td>
+									<td>{{ landmark.latitude }}</td>
+									<td>{{ landmark.longitude }}</td>
+									<td>{{ landmark.score }}</td>
+									<td><p-button icon="pi pi-trash" severity="danger"></p-button></td>
+								</tr>
+							</ng-template>
+						</p-table>
 					</p-accordionTab>
 				</div>
 				<div *ngIf="identifiedImage.logos.length > 0">
 					<p-accordionTab header="Logos" class="w-100">
-						<div *ngFor="let logo of identifiedImage.logos" class="tagDiv">TEST LOGO</div>
+						<p-table [value]="identifiedImage.logos" [ngStyle]="{ width: '100%' }">
+							<ng-template pTemplate="header">
+								<tr>
+									<th>Description</th>
+									<th>Score</th>
+									<th></th>
+								</tr>
+							</ng-template>
+							<ng-template pTemplate="body" let-logo>
+								<tr>
+									<td>{{ logo.description }}</td>
+									<td>{{ logo.score }}</td>
+									<td><p-button icon="pi pi-trash" severity="danger"></p-button></td>
+								</tr>
+							</ng-template>
+						</p-table>
 					</p-accordionTab>
 				</div>
 				<div *ngIf="identifiedImage.labels.length > 0">
@@ -23,45 +54,130 @@
 						</div>
 					</p-accordionTab>
 				</div>
-				<div *ngIf="identifiedImage.texts.length > 0">
-					<p-accordionTab header="Text" class="w-100">
-						<div *ngFor="let text of identifiedImage.texts" class="tagDiv">TEST TEXT</div>
-					</p-accordionTab>
-				</div>
 				<div *ngIf="identifiedImage.localizedObjects.length > 0">
 					<p-accordionTab header="Localized Objects" class="w-100">
-						<div *ngFor="let localizedObject of identifiedImage.localizedObjects" class="tagDiv">{{ localizedObject }}</div>
+						<div *ngFor="let localizedObject of identifiedImage.localizedObjects" class="tagDiv">
+							<div>{{ localizedObject }}</div>
+							<p-button icon="pi pi-trash" severity="danger"></p-button>
+						</div>
 					</p-accordionTab>
 				</div>
 				<div *ngIf="identifiedImage.safeSearch.length > 0">
 					<p-accordionTab header="Safe Search" class="w-100">
-						<div *ngFor="let safeSearch of identifiedImage.safeSearch" class="tagDiv">
-							<div>{{ safeSearch.category }}</div>
-							<div [ngStyle]="{ 'background-color': safeSearch.color }">{{ safeSearch.rating }}</div>
-						</div>
+						<p-table [value]="identifiedImage.safeSearch" [ngStyle]="{ width: '100%' }">
+							<ng-template pTemplate="header">
+								<tr>
+									<th>Category</th>
+									<th>Rating</th>
+									<th></th>
+								</tr>
+							</ng-template>
+							<ng-template pTemplate="body" let-safeSearch>
+								<tr>
+									<td [ngStyle]="{ 'font-weight': 'bold' }">{{ safeSearch.category }}</td>
+									<td [ngStyle]="{ 'background-color': safeSearch.color, color: 'white', 'border-radius': '12px', 'font-weight': 'bold' }">
+										{{ safeSearch.rating }}
+									</td>
+									<td><p-button icon="pi pi-trash" severity="danger"></p-button></td>
+								</tr>
+							</ng-template>
+						</p-table>
 					</p-accordionTab>
 				</div>
 				<div *ngIf="identifiedImage.imageProperties.length > 0">
 					<p-accordionTab header="Image Colors" class="w-100">
-						<div *ngFor="let imageProperty of identifiedImage.imageProperties" class="tagDiv">
-							<div>{{ imageProperty.color }}</div>
-							<div>{{ imageProperty.score }}</div>
-							<div>{{ imageProperty.pixelFraction }}</div>
-						</div>
-					</p-accordionTab>
-				</div>
-				<div *ngIf="identifiedImage.fullTextAnnotation.length > 0">
-					<p-accordionTab header="Full Text Annotation" class="w-100">
-						<div *ngFor="let fullTextAnnotation of identifiedImage.fullTextAnnotation" class="tagDiv">
-							<div>TEST1</div>
-						</div>
+						<p-table [value]="identifiedImage.imageProperties" [ngStyle]="{ width: '100%' }">
+							<ng-template pTemplate="header">
+								<tr>
+									<th></th>
+									<th>Color</th>
+									<th>Score</th>
+									<th>Pixel Fraction</th>
+									<th></th>
+								</tr>
+							</ng-template>
+							<ng-template pTemplate="body" let-imageProperty>
+								<tr>
+									<td><div [ngStyle]="{ width: '25px', height: '25px', 'background-color': imageProperty.color }"></div></td>
+									<td>{{ imageProperty.color }}</td>
+									<td>{{ imageProperty.score }}</td>
+									<td>{{ imageProperty.pixelFraction }}%</td>
+									<td><p-button icon="pi pi-trash" severity="danger"></p-button></td>
+								</tr>
+							</ng-template>
+						</p-table>
 					</p-accordionTab>
 				</div>
 				<div *ngIf="identifiedImage.webDetection.length > 0">
 					<p-accordionTab header="Web Detection" class="w-100">
 						<div *ngFor="let webDetection of identifiedImage.webDetection" class="tagDiv">
 							<div>{{ webDetection }}</div>
+							<p-button icon="pi pi-trash" severity="danger"></p-button>
 						</div>
+					</p-accordionTab>
+				</div>
+				<div *ngIf="identifiedImage.fullMatchingImages.length > 0">
+					<p-accordionTab header="Full Matching Images" class="w-100">
+						<p-table [value]="identifiedImage.fullMatchingImages" [ngStyle]="{ width: '100%' }">
+							<ng-template pTemplate="header">
+								<tr>
+									<th>URL</th>
+									<th></th>
+									<th></th>
+								</tr>
+							</ng-template>
+							<ng-template pTemplate="body" let-fullMatchingImage>
+								<tr>
+									<td><p-button icon="pi pi-copy" severity="info"></p-button></td>
+									<td>{{ fullMatchingImage }}</td>
+									<td><p-button icon="pi pi-trash" severity="danger"></p-button></td>
+								</tr>
+							</ng-template>
+						</p-table>
+					</p-accordionTab>
+				</div>
+				<div *ngIf="identifiedImage.partialMatchingImages.length > 0">
+					<p-accordionTab header="Partial Matching Images" class="w-100">
+						<p-table [value]="identifiedImage.partialMatchingImages" [ngStyle]="{ width: '100%' }">
+							<ng-template pTemplate="header">
+								<tr>
+									<th>URL</th>
+									<th></th>
+									<th></th>
+								</tr>
+							</ng-template>
+							<ng-template pTemplate="body" let-partialMatchingImage>
+								<tr>
+									<td><p-button icon="pi pi-copy" severity="info"></p-button></td>
+									<td>{{ partialMatchingImage }}</td>
+									<td><p-button icon="pi pi-trash" severity="danger"></p-button></td>
+								</tr>
+							</ng-template>
+						</p-table>
+					</p-accordionTab>
+				</div>
+				<div *ngIf="identifiedImage.pagesWithMatchingImage.length > 0">
+					<p-accordionTab header="Pages with Matching Images" class="w-100">
+						<p-table [value]="identifiedImage.pagesWithMatchingImage" [ngStyle]="{ width: '100%' }">
+							<ng-template pTemplate="header">
+								<tr>
+									<th>URL</th>
+									<th></th>
+									<th>Page Title</th>
+									<th></th>
+									<th></th>
+								</tr>
+							</ng-template>
+							<ng-template pTemplate="body" let-pageWithMatchingImage>
+								<tr>
+									<td><p-button icon="pi pi-copy" severity="info"></p-button></td>
+									<td>{{ pageWithMatchingImage.url }}</td>
+									<td><p-button icon="pi pi-copy" severity="info"></p-button></td>
+									<td>{{ pageWithMatchingImage.pageTitle }}</td>
+									<td><p-button icon="pi pi-trash" severity="danger"></p-button></td>
+								</tr>
+							</ng-template>
+						</p-table>
 					</p-accordionTab>
 				</div>
 			</p-accordion>

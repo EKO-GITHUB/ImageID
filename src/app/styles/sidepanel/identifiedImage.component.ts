@@ -1,23 +1,20 @@
 export interface IdentifiedImage {
 	id: number;
 	fileName: string;
-	landmarks: string[];
-	logos: string[];
+	landmarks: Landmark[];
+	logos: Logo[];
 	labels: string[];
-	texts: string[];
 	localizedObjects: string[];
 	safeSearch: SafeSearch[];
 	imageProperties: ImageProperties[];
-	fullTextAnnotation: string[];
 	webDetection: string[];
 	fullMatchingImages: string[];
 	partialMatchingImages: string[];
 	pagesWithMatchingImage: PageWithMatchingImage[];
-	productSearchResults: string[];
-	context: string[];
 }
 
 export interface SafeSearch {
+	color: string;
 	category: string;
 	rating: string;
 }
@@ -31,4 +28,16 @@ export interface ImageProperties {
 export interface PageWithMatchingImage {
 	url: string;
 	pageTitle: string;
+}
+
+export interface Landmark {
+	description: string;
+	latitude: number;
+	longitude: number;
+	score: number;
+}
+
+export interface Logo {
+	description: string;
+	score: number;
 }
