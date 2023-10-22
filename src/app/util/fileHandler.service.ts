@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FileHandle } from './dragDrop.directive';
 import { MessageService } from 'primeng/api';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import { IdentifiedImage } from '../styles/sidepanel/identifiedImage.component';
 
 @Injectable()
 export class FileHandlerService {
@@ -18,6 +19,9 @@ export class FileHandlerService {
 
 	identifySelectedButtonDisabled: boolean = true;
 	identifyAllButtonDisabled: boolean = true;
+	exportButtonDisabled: boolean = true;
+
+	identifiedImages: IdentifiedImage[] = [];
 
 	constructor(public messageService: MessageService, private sanitizer: DomSanitizer) {}
 

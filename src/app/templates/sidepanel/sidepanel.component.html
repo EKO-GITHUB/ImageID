@@ -1,12 +1,5 @@
-<p-image
-	id="imageID_{{ fileHandlerService.selectedFileName }}"
-	*ngIf="visibilityService.previewVisible"
-	[src]="fileHandlerService.selectedFilePreviewURL"
-	alt="previewImage"
-	width="300"
-	height="300"
->
-</p-image>
+<p-toast></p-toast>
+<img *ngIf="visibilityService.previewVisible" [src]="fileHandlerService.selectedFilePreviewURL" width="300" height="300" />
 <div class="identifyButtonContainer">
 	<p-button [disabled]="fileHandlerService.identifySelectedButtonDisabled" (onClick)="identifySelected()" [style]="{ padding: '0px' }" pRipple
 		>Identify selected images</p-button
@@ -45,4 +38,7 @@
 			</tbody>
 		</table>
 	</p-fieldset>
+</div>
+<div class="identifyButtonContainer">
+	<p-button [disabled]="fileHandlerService.exportButtonDisabled" (onClick)="showExportDialog()" pRipple>Export Results</p-button>
 </div>

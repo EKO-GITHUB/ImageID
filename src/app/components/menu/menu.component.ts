@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { LoadFromWebDialogComponent } from './load-from-web-dialog.component';
 import { SettingsWindowComponent } from './settings-window.component';
@@ -20,12 +19,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 	items!: MenuItem[];
 	ref: DynamicDialogRef | undefined;
 
-	constructor(
-		public dialogService: DialogService,
-		public messageService: MessageService,
-		private fileHandlerService: FileHandlerService,
-		private visibilityService: VisibilityService
-	) {}
+	constructor(public dialogService: DialogService, private fileHandlerService: FileHandlerService, private visibilityService: VisibilityService) {}
 
 	ngOnInit(): void {
 		this.items = [

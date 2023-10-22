@@ -109,6 +109,7 @@ import { DocumentationPDFComponent } from './components/menu/documentation-pdf.c
 import { SidebarComponent } from './components/sidepanel/sidepanel.component';
 import { FileHandlerService } from './util/fileHandler.service';
 import { VisibilityService } from './util/visibilityService.service';
+import { ExportDialogComponent } from './components/sidepanel/export-dialog.component';
 
 @NgModule({
 	imports: [
@@ -217,6 +218,7 @@ import { VisibilityService } from './util/visibilityService.service';
 		DocumentationPDFComponent,
 		SidebarComponent,
 		DragDirective,
+		ExportDialogComponent,
 	],
 	providers: [DialogService, MessageService, FileHandlerService, VisibilityService],
 	bootstrap: [AppComponent],

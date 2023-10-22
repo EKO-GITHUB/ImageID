@@ -1,0 +1,70 @@
+<div class="card flex justify-content-center w-100">
+	<p-accordion [activeIndex]="0">
+		<p-accordionTab *ngFor="let identifiedImage of fileHandlerService.identifiedImages" [header]="identifiedImage.id + ' ' + identifiedImage.fileName">
+			<p-accordion [activeIndex]="0">
+				<div *ngIf="identifiedImage.landmarks.length > 0">
+					<p-accordionTab header="Landmarks" class="w-100">
+						<div *ngFor="let landmarks of identifiedImage.landmarks" class="tagDiv">
+							<div>TEST LANDMARK 1</div>
+							<p-button icon="pi pi-trash" severity="danger"></p-button>
+						</div>
+					</p-accordionTab>
+				</div>
+				<div *ngIf="identifiedImage.logos.length > 0">
+					<p-accordionTab header="Logos" class="w-100">
+						<div *ngFor="let logo of identifiedImage.logos" class="tagDiv">TEST LOGO</div>
+					</p-accordionTab>
+				</div>
+				<div *ngIf="identifiedImage.labels.length > 0">
+					<p-accordionTab header="Labels" class="w-100">
+						<div *ngFor="let label of identifiedImage.labels" class="tagDiv">
+							<div>{{ label }}</div>
+							<p-button icon="pi pi-trash" severity="danger"></p-button>
+						</div>
+					</p-accordionTab>
+				</div>
+				<div *ngIf="identifiedImage.texts.length > 0">
+					<p-accordionTab header="Text" class="w-100">
+						<div *ngFor="let text of identifiedImage.texts" class="tagDiv">TEST TEXT</div>
+					</p-accordionTab>
+				</div>
+				<div *ngIf="identifiedImage.localizedObjects.length > 0">
+					<p-accordionTab header="Localized Objects" class="w-100">
+						<div *ngFor="let localizedObject of identifiedImage.localizedObjects" class="tagDiv">{{ localizedObject }}</div>
+					</p-accordionTab>
+				</div>
+				<div *ngIf="identifiedImage.safeSearch.length > 0">
+					<p-accordionTab header="Safe Search" class="w-100">
+						<div *ngFor="let safeSearch of identifiedImage.safeSearch" class="tagDiv">
+							<div>{{ safeSearch.category }}</div>
+							<div [ngStyle]="{ 'background-color': safeSearch.color }">{{ safeSearch.rating }}</div>
+						</div>
+					</p-accordionTab>
+				</div>
+				<div *ngIf="identifiedImage.imageProperties.length > 0">
+					<p-accordionTab header="Image Colors" class="w-100">
+						<div *ngFor="let imageProperty of identifiedImage.imageProperties" class="tagDiv">
+							<div>{{ imageProperty.color }}</div>
+							<div>{{ imageProperty.score }}</div>
+							<div>{{ imageProperty.pixelFraction }}</div>
+						</div>
+					</p-accordionTab>
+				</div>
+				<div *ngIf="identifiedImage.fullTextAnnotation.length > 0">
+					<p-accordionTab header="Full Text Annotation" class="w-100">
+						<div *ngFor="let fullTextAnnotation of identifiedImage.fullTextAnnotation" class="tagDiv">
+							<div>TEST1</div>
+						</div>
+					</p-accordionTab>
+				</div>
+				<div *ngIf="identifiedImage.webDetection.length > 0">
+					<p-accordionTab header="Web Detection" class="w-100">
+						<div *ngFor="let webDetection of identifiedImage.webDetection" class="tagDiv">
+							<div>{{ webDetection }}</div>
+						</div>
+					</p-accordionTab>
+				</div>
+			</p-accordion>
+		</p-accordionTab>
+	</p-accordion>
+</div>

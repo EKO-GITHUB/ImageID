@@ -1,9 +1,7 @@
-import { Component, SecurityContext } from '@angular/core';
+import { Component } from '@angular/core';
 import { FileHandle } from '../../util/dragDrop.directive';
-import { MessageService } from 'primeng/api';
 import { FileHandlerService } from 'src/app/util/fileHandler.service';
 import { VisibilityService } from 'src/app/util/visibilityService.service';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
 	selector: 'main-image-panel',
@@ -11,12 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 	styleUrls: ['../../styles/mainImagePanel/main-image-panel.component.less'],
 })
 export class MainImagePanelComponent {
-	constructor(
-		public messageService: MessageService,
-		private fileHandlerService: FileHandlerService,
-		public visibilityService: VisibilityService,
-		private sanitizer: DomSanitizer
-	) {}
+	constructor(private fileHandlerService: FileHandlerService, public visibilityService: VisibilityService) {}
 
 	filesDropped(files: FileHandle[]): void {
 		this.fileHandlerService.addFiles(files);
