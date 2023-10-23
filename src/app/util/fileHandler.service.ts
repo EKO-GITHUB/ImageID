@@ -18,8 +18,11 @@ export class FileHandlerService {
 	selectedFileSrc!: string;
 
 	identifySelectedButtonDisabled: boolean = true;
+	identifySelectedButtonLoading: boolean = false;
 	identifyAllButtonDisabled: boolean = true;
+	identifyAllButtonLoading: boolean = false;
 	exportButtonDisabled: boolean = true;
+	exportButtonLoading: boolean = false;
 
 	identifiedImages: IdentifiedImage[] = [];
 

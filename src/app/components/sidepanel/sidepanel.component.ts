@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FileHandlerService } from 'src/app/util/fileHandler.service';
 import { VisibilityService } from 'src/app/util/visibilityService.service';
@@ -14,6 +14,7 @@ import { IdentifiedImage, ImageProperties, Landmark, Logo, PageWithMatchingImage
 export class SidebarComponent {
 	client;
 	ref: DynamicDialogRef | undefined;
+	exportResultsItems: MenuItem[];
 
 	constructor(
 		public visibilityService: VisibilityService,
@@ -23,6 +24,20 @@ export class SidebarComponent {
 	) {
 		let vision = window.require('@google-cloud/vision');
 		this.client = new vision.ImageAnnotatorClient();
+		this.exportResultsItems = [
+			{
+				label: 'Export as XML',
+				command: () => {},
+			},
+			{
+				label: 'Export as JSON',
+				command: () => {},
+			},
+			{
+				label: 'Export as CSV',
+				command: () => {},
+			},
+		];
 	}
 
 	async identifySelected() {
@@ -31,7 +46,7 @@ export class SidebarComponent {
 			summary: 'Identifying',
 			detail: 'Identifying selected images (' + this.fileHandlerService.getNumberOfSelectedFiles() + ' files)',
 		});
-		this.fileHandlerService.identifySelectedButtonDisabled = true;
+		this.fileHandlerService.identifySelectedButtonLoading = true;
 		this.fileHandlerService.identifyAllButtonDisabled = true;
 		this.fileHandlerService.identifiedImages = [];
 
@@ -199,7 +214,7 @@ export class SidebarComponent {
 
 		console.log(JSON.stringify(this.fileHandlerService.identifiedImages, null, 4));
 
-		this.fileHandlerService.identifySelectedButtonDisabled = false;
+		this.fileHandlerService.identifySelectedButtonLoading = false;
 		this.fileHandlerService.identifyAllButtonDisabled = false;
 		this.fileHandlerService.exportButtonDisabled = false;
 

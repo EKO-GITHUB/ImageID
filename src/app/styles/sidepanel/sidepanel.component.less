@@ -61,14 +61,24 @@
 
 .identifyButtonContainer {
 	background-color: teal;
-	width: 315px;
+	width: 100%;
 	display: flex;
-	justify-content: center;
-	align-content: center;
-	border-radius: 5px;
 	padding: 5px;
+	flex-wrap: wrap;
+	align-content: center;
+	justify-content: center;
+	align-items: center;
+	gap: 10px;
 }
 
-.pButtonNoPadding {
-	padding: 0px;
+::ng-deep .p-splitbutton {
+	.ui-menu {
+		width: 310px;
+	}
+}
+
+::ng-deep .p-tieredmenu {
+	.p-tieredmenu-overlay {
+		width: 310px;
+	}
 }

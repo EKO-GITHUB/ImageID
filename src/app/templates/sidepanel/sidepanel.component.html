@@ -1,13 +1,26 @@
 <p-toast></p-toast>
 <img *ngIf="visibilityService.previewVisible" [src]="fileHandlerService.selectedFilePreviewURL" width="300" height="300" />
 <div class="identifyButtonContainer">
-	<p-button [disabled]="fileHandlerService.identifySelectedButtonDisabled" (onClick)="identifySelected()" [style]="{ padding: '0px' }" pRipple
-		>Identify selected images</p-button
+	<button
+		pButton
+		pRipple
+		[loading]="fileHandlerService.identifySelectedButtonLoading"
+		[disabled]="fileHandlerService.identifySelectedButtonDisabled"
+		(click)="identifySelected()"
+		[style]="{ display: 'flex', width: '100%', 'text-align': 'center', 'justify-content': 'center', 'align-items': 'center' }"
 	>
-	<div style="width: 15px"></div>
-	<p-button [disabled]="fileHandlerService.identifyAllButtonDisabled" (onClick)="identifyAll()" [style]="{ padding: '0px' }" pRipple
-		>Identify all images</p-button
+		Identify selected images
+	</button>
+	<button
+		pButton
+		pRipple
+		[loading]="fileHandlerService.identifyAllButtonLoading"
+		[disabled]="fileHandlerService.identifyAllButtonDisabled"
+		(click)="identifyAll()"
+		[style]="{ display: 'flex', width: '100%', 'text-align': 'center', 'justify-content': 'center', 'align-items': 'center' }"
 	>
+		Identify all images
+	</button>
 </div>
 <div class="card" *ngIf="visibilityService.detailsVisible">
 	<p-fieldset>
@@ -40,5 +53,14 @@
 	</p-fieldset>
 </div>
 <div class="identifyButtonContainer">
-	<p-button [disabled]="fileHandlerService.exportButtonDisabled" (onClick)="showExportDialog()" pRipple>Export Results</p-button>
+	<button
+		pButton
+		pRipple
+		[disabled]="fileHandlerService.exportButtonDisabled"
+		(click)="showExportDialog()"
+		[style]="{ display: 'flex', width: '100%', 'text-align': 'center', 'justify-content': 'center', 'align-items': 'center' }"
+	>
+		Preview Results
+	</button>
+	<p-splitButton #ua label="Export Results" (onClick)="ua.onDropdownButtonClick($event)" [model]="exportResultsItems"></p-splitButton>
 </div>
