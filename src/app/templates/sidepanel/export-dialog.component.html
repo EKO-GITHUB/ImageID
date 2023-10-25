@@ -20,7 +20,9 @@
 									<td>{{ landmark.latitude }}</td>
 									<td>{{ landmark.longitude }}</td>
 									<td>{{ landmark.score }}</td>
-									<td><p-button icon="pi pi-trash" severity="danger"></p-button></td>
+									<td>
+										<p-button icon="pi pi-trash" severity="danger" (onClick)="removeLandmark(identifiedImage, landmark)" />
+									</td>
 								</tr>
 							</ng-template>
 						</p-table>
@@ -40,7 +42,9 @@
 								<tr>
 									<td>{{ logo.description }}</td>
 									<td>{{ logo.score }}</td>
-									<td><p-button icon="pi pi-trash" severity="danger"></p-button></td>
+									<td>
+										<p-button icon="pi pi-trash" severity="danger" (onClick)="removeLogo(identifiedImage, logo)" />
+									</td>
 								</tr>
 							</ng-template>
 						</p-table>
@@ -50,7 +54,7 @@
 					<p-accordionTab header="Labels" class="w-100">
 						<div *ngFor="let label of identifiedImage.labels" class="tagDiv">
 							<div>{{ label }}</div>
-							<p-button icon="pi pi-trash" severity="danger"></p-button>
+							<p-button icon="pi pi-trash" severity="danger" (onClick)="removeLabel(identifiedImage, label)" />
 						</div>
 					</p-accordionTab>
 				</div>
@@ -58,7 +62,7 @@
 					<p-accordionTab header="Localized Objects" class="w-100">
 						<div *ngFor="let localizedObject of identifiedImage.localizedObjects" class="tagDiv">
 							<div>{{ localizedObject }}</div>
-							<p-button icon="pi pi-trash" severity="danger"></p-button>
+							<p-button icon="pi pi-trash" severity="danger" (onClick)="removeLocalizedObject(identifiedImage, localizedObject)" />
 						</div>
 					</p-accordionTab>
 				</div>
@@ -78,7 +82,9 @@
 									<td [ngStyle]="{ 'background-color': safeSearch.color, color: 'white', 'border-radius': '12px', 'font-weight': 'bold' }">
 										{{ safeSearch.rating }}
 									</td>
-									<td><p-button icon="pi pi-trash" severity="danger"></p-button></td>
+									<td>
+										<p-button icon="pi pi-trash" severity="danger" (onClick)="removeSafeSearch(identifiedImage, safeSearch)" />
+									</td>
 								</tr>
 							</ng-template>
 						</p-table>
@@ -102,7 +108,7 @@
 									<td>{{ imageProperty.color }}</td>
 									<td>{{ imageProperty.score }}</td>
 									<td>{{ imageProperty.pixelFraction }}%</td>
-									<td><p-button icon="pi pi-trash" severity="danger"></p-button></td>
+									<td><p-button icon="pi pi-trash" severity="danger" (onClick)="removeImageProperty(identifiedImage, imageProperty)" /></td>
 								</tr>
 							</ng-template>
 						</p-table>
@@ -112,7 +118,7 @@
 					<p-accordionTab header="Web Detection" class="w-100">
 						<div *ngFor="let webDetection of identifiedImage.webDetection" class="tagDiv">
 							<div>{{ webDetection }}</div>
-							<p-button icon="pi pi-trash" severity="danger"></p-button>
+							<p-button icon="pi pi-trash" severity="danger" (onClick)="removeWebDetection(identifiedImage, webDetection)" />
 						</div>
 					</p-accordionTab>
 				</div>
@@ -128,9 +134,11 @@
 							</ng-template>
 							<ng-template pTemplate="body" let-fullMatchingImage>
 								<tr>
-									<td><p-button icon="pi pi-copy" severity="info"></p-button></td>
+									<td><p-button icon="pi pi-copy" severity="info" (onClick)="copyToClipboard(fullMatchingImage)" /></td>
 									<td>{{ fullMatchingImage }}</td>
-									<td><p-button icon="pi pi-trash" severity="danger"></p-button></td>
+									<td>
+										<p-button icon="pi pi-trash" severity="danger" (onClick)="removeFullMatchingImage(identifiedImage, fullMatchingImage)" />
+									</td>
 								</tr>
 							</ng-template>
 						</p-table>
@@ -148,9 +156,11 @@
 							</ng-template>
 							<ng-template pTemplate="body" let-partialMatchingImage>
 								<tr>
-									<td><p-button icon="pi pi-copy" severity="info"></p-button></td>
+									<td><p-button icon="pi pi-copy" severity="info" (onClick)="copyToClipboard(partialMatchingImage)" /></td>
 									<td>{{ partialMatchingImage }}</td>
-									<td><p-button icon="pi pi-trash" severity="danger"></p-button></td>
+									<td>
+										<p-button icon="pi pi-trash" severity="danger" (onClick)="removePartialMatchingImage(identifiedImage, partialMatchingImage)" />
+									</td>
 								</tr>
 							</ng-template>
 						</p-table>
@@ -170,11 +180,17 @@
 							</ng-template>
 							<ng-template pTemplate="body" let-pageWithMatchingImage>
 								<tr>
-									<td><p-button icon="pi pi-copy" severity="info"></p-button></td>
+									<td>
+										<p-button icon="pi pi-copy" severity="info" (onClick)="copyToClipboard(pageWithMatchingImage.url)" />
+									</td>
 									<td>{{ pageWithMatchingImage.url }}</td>
-									<td><p-button icon="pi pi-copy" severity="info"></p-button></td>
+									<td>
+										<p-button icon="pi pi-copy" severity="info" (onClick)="copyToClipboard(pageWithMatchingImage.pageTitle)" />
+									</td>
 									<td>{{ pageWithMatchingImage.pageTitle }}</td>
-									<td><p-button icon="pi pi-trash" severity="danger"></p-button></td>
+									<td>
+										<p-button icon="pi pi-trash" severity="danger" (onClick)="removePageWithMatchingImage(identifiedImage, pageWithMatchingImage)" />
+									</td>
 								</tr>
 							</ng-template>
 						</p-table>

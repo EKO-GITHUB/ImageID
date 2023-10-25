@@ -1,7 +1,6 @@
-<p-toast></p-toast>
 <div class="dropzone" dragnanddrop (files)="filesDropped($event)">
 	<div *ngIf="visibilityService.showAsGallery" style="display: flex; flex-wrap: wrap; flex-direction: row; justify-content: flex-start">
-		<div *ngFor="let file of getFiles()">
+		<div *ngFor="let file of fileHandlerService.getFiles()">
 			<a (click)="imageClick(file, $event)" pTooltip="Name: {{ file.file.name }}" class="imageHover">
 				<div
 					[ngStyle]="{
@@ -19,13 +18,13 @@
 		</div>
 	</div>
 	<div *ngIf="!visibilityService.showAsGallery" style="flex-grow: 1">
-		<div class="listRow" style="background-color: white">
+		<div class="listRow">
 			<div class="listImage" style="font-weight: bold"></div>
 			<div class="listID" style="font-weight: bold">ID</div>
 			<div class="listFileName" style="font-weight: bold">Name</div>
 			<div class="listFileType" style="font-weight: bold">Type</div>
 		</div>
-		<div *ngFor="let file of getFiles()" style="flex-grow: 1">
+		<div *ngFor="let file of fileHandlerService.getFiles()" style="flex-grow: 1">
 			<a (click)="imageClick(file, $event)" pTooltip="Name: {{ file.file.name }}" class="imageHover unselectable">
 				<div
 					[ngStyle]="{

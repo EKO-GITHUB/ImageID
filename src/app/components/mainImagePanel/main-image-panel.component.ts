@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FileHandle } from '../../util/dragDrop.directive';
 import { FileHandlerService } from 'src/app/util/fileHandler.service';
 import { VisibilityService } from 'src/app/util/visibilityService.service';
@@ -9,14 +9,10 @@ import { VisibilityService } from 'src/app/util/visibilityService.service';
 	styleUrls: ['../../styles/mainImagePanel/main-image-panel.component.less'],
 })
 export class MainImagePanelComponent {
-	constructor(private fileHandlerService: FileHandlerService, public visibilityService: VisibilityService) {}
+	constructor(public fileHandlerService: FileHandlerService, public visibilityService: VisibilityService) {}
 
 	filesDropped(files: FileHandle[]): void {
 		this.fileHandlerService.addFiles(files);
-	}
-
-	getFiles(): FileHandle[] {
-		return this.fileHandlerService.getFiles();
 	}
 
 	imageClick(filehandle: FileHandle, $event: MouseEvent) {
@@ -64,30 +60,24 @@ export class MainImagePanelComponent {
 		// Image Details
 		if (this.fileHandlerService.getNumberOfSelectedFiles() == 0) {
 			this.fileHandlerService.selectedFilePreviewURL = 'assets/images/noImageSelected.png';
-			this.fileHandlerService.selectedFileName = 'Select an image to show details';
+			this.fileHandlerService.selectedFileName = 'Select an image to show  details';
 			this.fileHandlerService.selectedFileHeight = ' ';
 			this.fileHandlerService.selectedFileWidth = ' ';
 			this.fileHandlerService.selectedFileSize = ' ';
 		} else if (this.fileHandlerService.getNumberOfSelectedFiles() == 1) {
-			for (let selectedFile of this.getFiles()) {
-				if (selectedFile.selected) {
-					let URL = window.URL || selectedFile.file.webkitRelativePath;
-					let img = new Image();
-					img.src = URL.createObjectURL(selectedFile.file);
-					img.onload = (e: any) => {
-						this.fileHandlerService.selectedFileWidth = img.width + ' px';
-						this.fileHandlerService.selectedFileHeight = img.height + ' px';
-					};
-
-					this.fileHandlerService.selectedFilePreviewURL = selectedFile.url;
-					this.fileHandlerService.selectedFileName = selectedFile.file.name;
-					this.fileHandlerService.selectedFilePath = selectedFile.file.webkitRelativePath;
-					this.fileHandlerService.selectedFileSize = this.fileHandlerService.convertBitSizeToText(selectedFile.file.size);
+			for (let file of this.fileHandlerService.getFiles()) {
+				if (file.selected) {
+					this.fileHandlerService.selectedFileSize = this.fileHandlerService.convertBitSizeToText(file.file.size);
+					this.fileHandlerService.selectedFilePreviewURL = file.url;
+					this.fileHandlerService.selectedFileName = file.file.name;
+					this.fileHandlerService.selectedFilePath = file.file.webkitRelativePath;
+					this.fileHandlerService.selectedFileWidth = this.fileHandlerService.imageMapWidth.get(file.file.name) || '0';
+					this.fileHandlerService.selectedFileHeight = this.fileHandlerService.imageMapHeight.get(file.file.name) || '0';
 				}
 			}
 		} else if (this.fileHandlerService.getNumberOfSelectedFiles() > 1) {
 			let totalFileSize: number = 0;
-			for (let selectedFile of this.getFiles()) {
+			for (let selectedFile of this.fileHandlerService.getFiles()) {
 				if (selectedFile.selected) totalFileSize += selectedFile.file.size;
 			}
 			this.fileHandlerService.selectedFileName = 'Multiple files selected';
@@ -99,10 +89,8 @@ export class MainImagePanelComponent {
 		// Identify Buttons
 		if (this.fileHandlerService.getNumberOfSelectedFiles() == 0) {
 			this.fileHandlerService.identifySelectedButtonDisabled = true;
-			this.fileHandlerService.identifyAllButtonDisabled = true;
 		} else {
 			this.fileHandlerService.identifySelectedButtonDisabled = false;
-			this.fileHandlerService.identifyAllButtonDisabled = false;
 		}
 	}
 }

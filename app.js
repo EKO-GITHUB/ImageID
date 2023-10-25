@@ -31,7 +31,6 @@ function createWindow() {
 			contextIsolation: false,
 		},
 	});
-	appWindow.setBackgroundColor("#116A7B");
 	appWindow.maximize();
 	appWindow.setMenu(null);
 	appWindow.loadFile("dist/image-id/index.html");

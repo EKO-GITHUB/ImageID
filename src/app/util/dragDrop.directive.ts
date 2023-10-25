@@ -15,26 +15,26 @@ export interface FileHandle {
 export class DragDirective {
 	@Output() files: EventEmitter<FileHandle[]> = new EventEmitter();
 
-	@HostBinding('style.background') private background = '#eee';
+	@HostBinding('style.background') private background = '#c242f7';
 
 	constructor(private sanitizer: DomSanitizer, private filehandlerService: FileHandlerService) {}
 
 	@HostListener('dragover', ['$event']) public onDragOver(evt: DragEvent) {
 		evt.preventDefault();
 		evt.stopPropagation();
-		this.background = '#999';
+		this.background = '#da82ff';
 	}
 
 	@HostListener('dragleave', ['$event']) public onDragLeave(evt: DragEvent) {
 		evt.preventDefault();
 		evt.stopPropagation();
-		this.background = '#00ffa126';
+		this.background = '#c242f7';
 	}
 
 	@HostListener('drop', ['$event']) public onDrop(evt: DragEvent) {
 		evt.preventDefault();
 		evt.stopPropagation();
-		this.background = '#00ffa126';
+		this.background = '#c242f7';
 		let id: number;
 		if (this.filehandlerService.getFiles().at(-1)) id = this.filehandlerService.getFiles().at(-1)!.id + 1;
 		else id = 1;

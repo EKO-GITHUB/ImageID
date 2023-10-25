@@ -1,5 +1,5 @@
 <p-toast></p-toast>
-<img *ngIf="visibilityService.previewVisible" [src]="fileHandlerService.selectedFilePreviewURL" width="300" height="300" />
+<img *ngIf="visibilityService.previewVisible" [src]="fileHandlerService.selectedFilePreviewURL" width="300" height="300" style="margin-right: 5px" />
 <div class="identifyButtonContainer">
 	<button
 		pButton
@@ -62,5 +62,12 @@
 	>
 		Preview Results
 	</button>
-	<p-splitButton #ua label="Export Results" (onClick)="ua.onDropdownButtonClick($event)" [model]="exportResultsItems"></p-splitButton>
+	<p-splitButton
+		[disabled]="fileHandlerService.exportButtonDisabled"
+		[ngStyle]="{ width: '100%' }"
+		#ua
+		label="Export Results"
+		(onClick)="ua.onDropdownButtonClick($event)"
+		[model]="exportResultsItems"
+	></p-splitButton>
 </div>

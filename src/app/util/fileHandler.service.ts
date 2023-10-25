@@ -7,10 +7,12 @@ import { IdentifiedImage } from '../styles/sidepanel/identifiedImage.component';
 @Injectable()
 export class FileHandlerService {
 	files: FileHandle[] = [];
+	imageMapWidth = new Map<string, string>();
+	imageMapHeight = new Map<string, string>();
 	fileLastClickedOn!: FileHandle;
 
 	selectedFilePreviewURL: SafeUrl = 'assets/images/noImageSelected.png';
-	selectedFileName: string = 'Select a file to show details';
+	selectedFileName: string = 'Select a file to show  details';
 	selectedFilePath!: string;
 	selectedFileWidth!: string;
 	selectedFileHeight!: string;
@@ -56,7 +58,20 @@ export class FileHandlerService {
 				return;
 			}
 
+			let URL = window.URL || file.file.webkitRelativePath;
+			let img = new Image();
+			img.src = URL.createObjectURL(file.file);
+			let imgWidth;
+			let imgHeight;
+			img.onload = () => {
+				imgWidth = img.width;
+				imgHeight = img.height;
+				this.imageMapWidth.set(file.file.name, imgWidth + ' px');
+				this.imageMapHeight.set(file.file.name, imgHeight + ' px');
+			};
+
 			this.files.push(file);
+			this.identifyAllButtonDisabled = false;
 		}
 	}
 
