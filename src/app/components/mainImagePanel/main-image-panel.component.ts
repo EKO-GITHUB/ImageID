@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { FileHandle } from '../../util/dragDrop.directive';
 import { FileHandlerService } from 'src/app/util/fileHandler.service';
 import { VisibilityService } from 'src/app/util/visibilityService.service';
