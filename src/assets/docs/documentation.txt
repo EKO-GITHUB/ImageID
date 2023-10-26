@@ -1,0 +1,132 @@
+Image Identifier Logo
+
+2023/10/26
+V0.2.0
+
+Features:
+- Image Add
+	- Add images from
+		- the menu
+			- add image from the file system (load image from file system) or
+			- add image from the internet (load image from web)
+		- Drag and drop the image onto the drop zone (purple panel)
+	- Images may have these MIME types:
+		- image/jpeg' (.jpg, .jpeg)
+		- image/png (.png)
+		- image/tiff (.tif, .tiff)
+		- image/gif (.gif)
+		- image/bmp (.bmp)
+		- image/webp (.webp)
+		- image/vnd.microsoft.icon (.icon, .ico)
+	- Images are only supported up to 10MB file size as Google Cloud Vision rejects images above this file size
+
+- Ìmage Display
+	- You can show the image list as either a list or gallery (Menu -> View -> Show as List/Gallery)
+- Image Preview
+	- Show / Hide the image preview (300px x 300px) (Menu -> View -> Hide/Show Image preview)
+	- The Image Preview shows the currently selected image or image that was selected first if multiple are selected
+- Image Details
+	- Show / Hide the image details (Menu -> View -> Hide/Show Image details)
+	- The image details show the details of all selected images
+	- Image details include:
+		- File Name (random UUID if image was added from the internet)
+		- Image width
+		- Image height
+		- Image file size in readable format
+	- If multiple images are selected, the values are:
+		- File Name -> 'Multiple images are selected'
+		- Image width -> 'Multiple images are selected'
+		- Image height -> 'Multiple images are selected'
+		- Image file -> total file size of all selected images
+- Result preview
+	- review the results and modify the identified attributes.
+	- Note that attributes may only be removed within the preview panel, not added
+- Export
+	- Export the results as single XML, JSON or CSV to a file.
+
+
+Settings
+Stored File:
+- Settings are stored to the disk through Electron-Store. The default store location varies depending on system. For windows users it is:
+	C:\Users\*YOUR_USERNAME*\AppData\Roaming\electron-store-nodejs\Config\config.json
+
+Google Cloud Vision:
+
+As the identification provided by google is NOT free, you will need to provide your OWN google cloud vision project to bill the costs to.
+A setup guide can be found here: 
+
+- The following identifcation features are supported:
+	- Landmarks:
+		A landmark is a commonly known location
+		example: 'The pyramid of Giza'
+		- The name of the identified landmark
+		- The score assigned to it by the Vision API
+		- The longitude and latitude (location on earth)
+	- Logos:
+		A logo is a symbol or text that identifies a brand
+		example: 'Google'
+		- The name of the logo
+		- The score assigned to it by the Vision API
+	- Labels:
+		A label is a >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		example: 'food'
+		- name of the label
+	- Localized Objects:
+		A localized Object is the english language name of an object visible on the image
+		example: 'leg'
+		- name of the localized object
+	- SafeSearch:
+		SafeSearch determines the likelihood of a content category visible on the image.
+		The types of SafeSearch categories are:
+			- Adult (explicit or sexual content)
+			- Violence (gore, injury)
+			- Medical (visible wounds, pharmaceuticals, medical instruments, surgery)
+			- Spoof (humourous content ('memes' are identified by a top text, an image and bottom text))
+			- Racy (content that would be business inappropriate)
+		The likelihood options are:
+			- UNKNOWN			(black)
+			- VERY_UNLIKELY		(teal)
+			- UNLIKELY 			(blue)
+			- POSSIBLE 			(yellow)
+			- LIKELY 			(orange)
+			- VERY_LIKELY 		(red)
+		- the category name
+		- the color associated
+		- the likelihood rating
+	- Image Properties:
+		Image Properties are the colors detected on the image
+		example: #fff 0.64 23%
+		- A color (with preview rectangle)
+		- The score assigned to it by the Vision API
+		- The Pixel Fraction (what percentage this color takes up of the screen)
+	- Web Detection:
+		Web detection includes related search terms and words associated with the image
+		example: 'children playing'
+		- name of the web detection label
+	- Full Matching Images:
+		Links to web sites that show the identified image in its entirety
+		example: 'https://linkstoimage.com/fullimage.png'
+		- Link to the image on the web
+	- Partial Matching Images:
+		Links to web sites that show the identified image partially
+		example: 'https://linkstoimage.com/partialimage.png'
+		- Link to the image on the web
+	- Pages with Matching images:
+		A Page with Matching Image is a web site that has the identified image somewhere on the page and the associated page title
+		example: link: 'https://linkstoimage.com/webpagewithimage', pageTitle: 'This page contains the identified image'
+		- Link to the web page
+		- The page title
+- You can disable each feature individually through the on/off slider. If the slider is disabled, the feature will not be included in the final result
+- Score Filters:
+	- Landmarks, Logos, Labels, Localized Objects, Image Properties and Web Detection offer a 'score' associated with the attribute.
+	- The score ranges from '0' (extremely uncertain) to '1' (extremely certain). Most identified scores are within the 0.4-0.7 range.
+		- A '1' score is almost never reached, while a '0' score is usually ommitted by default. 
+	- You can set these score filters. Note that manually set filters above '1' do not make a difference
+- Safe Search Filter:
+	- If the identified SafeSearch rating is above the filter you set, the image will be added to the results.
+
+
+
+Known bugs:
+V0.2.0:
+	- Startup time is very long due to a bug related to electron-store

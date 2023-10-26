@@ -110,6 +110,7 @@ import { SidebarComponent } from './components/sidepanel/sidepanel.component';
 import { FileHandlerService } from './util/fileHandler.service';
 import { VisibilityService } from './util/visibilityService.service';
 import { ExportDialogComponent } from './components/sidepanel/export-dialog.component';
+import { SettingsService } from './util/settingsService.service';
 
 @NgModule({
 	imports: [
@@ -220,7 +221,7 @@ import { ExportDialogComponent } from './components/sidepanel/export-dialog.comp
 		DragDirective,
 		ExportDialogComponent,
 	],
-	providers: [DialogService, MessageService, FileHandlerService, VisibilityService],
+	providers: [DialogService, MessageService, FileHandlerService, VisibilityService, SettingsService],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}

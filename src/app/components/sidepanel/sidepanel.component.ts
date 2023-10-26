@@ -4,8 +4,9 @@ import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { FileHandlerService } from 'src/app/util/fileHandler.service';
 import { VisibilityService } from 'src/app/util/visibilityService.service';
 import { ExportDialogComponent } from './export-dialog.component';
-import { IdentifiedImage, ImageProperties, Landmark, Logo, PageWithMatchingImage, SafeSearch } from 'src/app/styles/sidepanel/identifiedImage.component';
+import { IdentifiedImage, ImageProperties, Landmark, Logo, PageWithMatchingImage, SafeSearch } from 'src/app/components/sidepanel/identifiedImage.component';
 import { FileHandle } from 'src/app/util/dragDrop.directive';
+import { SettingsService } from 'src/app/util/settingsService.service';
 
 @Component({
 	selector: 'sidepanel',
@@ -21,7 +22,8 @@ export class SidebarComponent {
 		public visibilityService: VisibilityService,
 		public fileHandlerService: FileHandlerService,
 		public dialogService: DialogService,
-		public messageService: MessageService
+		public messageService: MessageService,
+		public settingsService: SettingsService
 	) {
 		let vision = window.require('@google-cloud/vision');
 		this.client = new vision.ImageAnnotatorClient();
@@ -41,7 +43,7 @@ export class SidebarComponent {
 		];
 	}
 
-	async identifyImage(file: FileHandle): Promise<IdentifiedImage> {
+	async identifyImage(file: FileHandle): Promise<IdentifiedImage | undefined> {
 		let encoded = Buffer.from(await file.file.arrayBuffer()).toString('base64');
 		const request = {
 			image: {
@@ -54,7 +56,6 @@ export class SidebarComponent {
 				{ type: 'LOGO_DETECTION' },
 				{ type: 'OBJECT_LOCALIZATION' },
 				{ type: 'SAFE_SEARCH_DETECTION' },
-				{ type: 'TEXT_DETECTION' },
 				{ type: 'WEB_DETECTION' },
 			],
 		};
@@ -69,118 +70,159 @@ export class SidebarComponent {
 
 		//labels
 		let labelDescriptions: string[] = [];
-		labelResults.forEach((label: { score: number; description: string }) => {
-			if (label.score > 0) labelDescriptions.push(label.description);
-		});
-		labelDescriptions = labelDescriptions.filter(this.onlyUnique);
+		if (this.settingsService.identifyLabels) {
+			labelResults.forEach((label: { score: number; description: string }) => {
+				if (label.score > this.settingsService.identifyLabelsMinScore) labelDescriptions.push(label.description);
+			});
+			labelDescriptions = labelDescriptions.filter(this.onlyUnique);
+		}
 
 		//landmarks
 		let landMarks: Landmark[] = [];
-		landmarkResults.forEach(
-			(landmark: {
-				locations: {
-					latLng: {
-						latitude: number;
-						longitude: number;
+		if (this.settingsService.identifyLandmarks) {
+			landmarkResults.forEach(
+				(landmark: {
+					locations: {
+						latLng: {
+							latitude: number;
+							longitude: number;
+						};
+					}[];
+					description: any;
+					score: any;
+				}) => {
+					let newLatitude: number = landmark.locations[0].latLng.latitude;
+					let newLongitude: number = landmark.locations[0].latLng.longitude;
+					let newLandmark: Landmark = {
+						description: landmark.description,
+						latitude: newLatitude,
+						longitude: newLongitude,
+						score: landmark.score,
 					};
-				}[];
-				description: any;
-				score: any;
-			}) => {
-				let newLatitude: number = landmark.locations[0].latLng.latitude;
-				let newLongitude: number = landmark.locations[0].latLng.longitude;
-				let newLandmark: Landmark = {
-					description: landmark.description,
-					latitude: newLatitude,
-					longitude: newLongitude,
-					score: landmark.score,
-				};
-				landMarks.push(newLandmark);
-			}
-		);
-		labelDescriptions = labelDescriptions.filter(this.onlyUnique);
+					if (newLandmark.score > this.settingsService.identifyLandmarksMinScore) landMarks.push(newLandmark);
+				}
+			);
+			landMarks = landMarks.filter(this.onlyUnique);
+		}
 
 		//logos
 		let logos: Logo[] = [];
-		logoDetectionResults.forEach((logo: { description: any; score: any }) => {
-			let newLogo: Logo = {
-				description: logo.description,
-				score: logo.score,
-			};
-			logos.push(newLogo);
-		});
-		labelDescriptions = labelDescriptions.filter(this.onlyUnique);
+		if (this.settingsService.identifyLogos) {
+			logoDetectionResults.forEach((logo: { description: any; score: any }) => {
+				let newLogo: Logo = {
+					description: logo.description,
+					score: logo.score,
+				};
+				if (newLogo.score > this.settingsService.identifyLogosMinScore) logos.push(newLogo);
+			});
+			logos = logos.filter(this.onlyUnique);
+		}
 
 		//objects
 		let localizedObjects: string[] = [];
-		objectLocalizationResults.forEach((object: { score: number; name: string }) => {
-			if (object.score > 0) localizedObjects.push(object.name);
-		});
-		localizedObjects = localizedObjects.filter(this.onlyUnique);
+		if (this.settingsService.identifyLocalizedObjects) {
+			objectLocalizationResults.forEach((object: { score: number; name: string }) => {
+				if (object.score > this.settingsService.identifyLocalizedObjectsMinScore) localizedObjects.push(object.name);
+			});
+			localizedObjects = localizedObjects.filter(this.onlyUnique);
+		}
 
 		//safeSearch
 		let safeSearch: SafeSearch[] = [];
-		let safeSearchAdult: SafeSearch = {
-			color: this.getColorForSafeSearchRating(safeSearchResults.adult),
-			category: 'adult',
-			rating: safeSearchResults.adult,
-		};
-		let safeSearchSpoof: SafeSearch = {
-			color: this.getColorForSafeSearchRating(safeSearchResults.spoof),
-			category: 'spoof',
-			rating: safeSearchResults.spoof,
-		};
-		let safeSearchMedical: SafeSearch = {
-			color: this.getColorForSafeSearchRating(safeSearchResults.medical),
-			category: 'medical',
-			rating: safeSearchResults.medical,
-		};
-		let safeSearchViolence: SafeSearch = {
-			color: this.getColorForSafeSearchRating(safeSearchResults.violence),
-			category: 'violence',
-			rating: safeSearchResults.violence,
-		};
-		let safeSearchRacy: SafeSearch = { color: this.getColorForSafeSearchRating(safeSearchResults.racy), category: 'racy', rating: safeSearchResults.racy };
-		safeSearch.push(safeSearchAdult, safeSearchSpoof, safeSearchMedical, safeSearchViolence, safeSearchRacy);
+
+		console.log(this.settingsService.identifySafeSearchFilterAdultMaxScore);
+		console.log(this.settingsService.identifySafeSearchFilterViolenceMaxScore);
+		console.log(this.settingsService.identifySafeSearchFilterRacyMaxScore);
+		console.log(this.settingsService.identifySafeSearchFilterMedicalMaxScore);
+		console.log(this.settingsService.identifySafeSearchFilterSpoofMaxScore);
+		if (this.settingsService.identifySafeSearch) {
+			if (
+				this.getValueForSafeSeach(safeSearchResults.adult) > this.getValueForSafeSeach(this.settingsService.identifySafeSearchFilterAdultMaxScore) ||
+				this.getValueForSafeSeach(safeSearchResults.violence) > this.getValueForSafeSeach(this.settingsService.identifySafeSearchFilterViolenceMaxScore) ||
+				this.getValueForSafeSeach(safeSearchResults.racy) > this.getValueForSafeSeach(this.settingsService.identifySafeSearchFilterRacyMaxScore) ||
+				this.getValueForSafeSeach(safeSearchResults.medical) > this.getValueForSafeSeach(this.settingsService.identifySafeSearchFilterMedicalMaxScore) ||
+				this.getValueForSafeSeach(safeSearchResults.spoof) > this.getValueForSafeSeach(this.settingsService.identifySafeSearchFilterSpoofMaxScore)
+			) {
+				return undefined;
+			}
+			let safeSearchAdult: SafeSearch = {
+				color: this.getColorForSafeSearchRating(safeSearchResults.adult),
+				category: 'adult',
+				rating: safeSearchResults.adult,
+			};
+			let safeSearchSpoof: SafeSearch = {
+				color: this.getColorForSafeSearchRating(safeSearchResults.spoof),
+				category: 'spoof',
+				rating: safeSearchResults.spoof,
+			};
+			let safeSearchMedical: SafeSearch = {
+				color: this.getColorForSafeSearchRating(safeSearchResults.medical),
+				category: 'medical',
+				rating: safeSearchResults.medical,
+			};
+			let safeSearchViolence: SafeSearch = {
+				color: this.getColorForSafeSearchRating(safeSearchResults.violence),
+				category: 'violence',
+				rating: safeSearchResults.violence,
+			};
+			let safeSearchRacy: SafeSearch = {
+				color: this.getColorForSafeSearchRating(safeSearchResults.racy),
+				category: 'racy',
+				rating: safeSearchResults.racy,
+			};
+			safeSearch.push(safeSearchAdult, safeSearchSpoof, safeSearchMedical, safeSearchViolence, safeSearchRacy);
+		}
 
 		//image Properties
 		let imageProperties: ImageProperties[] = [];
-		imagePropertiesResults.dominantColors.colors.forEach(
-			(colorItem: { color: { red: string; green: string; blue: string; alpha: string }; score: any; pixelFraction: any }) => {
-				let imageProperty: ImageProperties = {
-					color: this.RGBToHex(colorItem.color.red, colorItem.color.green, colorItem.color.blue, colorItem.color.alpha),
-					score: colorItem.score,
-					pixelFraction: colorItem.pixelFraction,
-				};
-				imageProperties.push(imageProperty);
-			}
-		);
+		if (this.settingsService.identifyImageProperties) {
+			imagePropertiesResults.dominantColors.colors.forEach(
+				(colorItem: { color: { red: string; green: string; blue: string; alpha: string }; score: any; pixelFraction: any }) => {
+					let imageProperty: ImageProperties = {
+						color: this.RGBToHex(colorItem.color.red, colorItem.color.green, colorItem.color.blue, colorItem.color.alpha),
+						score: colorItem.score,
+						pixelFraction: colorItem.pixelFraction,
+					};
+					if (colorItem.score > this.settingsService.identifyImagePropertyColorMinScore) imageProperties.push(imageProperty);
+				}
+			);
+		}
 
 		//webDetection
 		let webDetectionDescriptions: string[] = [];
 		let fullMatchingImages: string[] = [];
 		let partialMatchingImages: string[] = [];
 		let pagesWithMatchingImage: PageWithMatchingImage[] = [];
-		webDetectionResults.webEntities.forEach((entity: { score: number; description: string }) => {
-			if (entity.score > 0) webDetectionDescriptions.push(entity.description);
-		});
-		webDetectionResults.fullMatchingImages.forEach((fullMatchingImage: { url: string }) => {
-			fullMatchingImages.push(fullMatchingImage.url);
-		});
+		if (this.settingsService.identifyWebDetection) {
+			webDetectionResults.webEntities.forEach((entity: { score: number; description: string }) => {
+				if (entity.score > this.settingsService.identifyWebDetectionMinScore) webDetectionDescriptions.push(entity.description);
+			});
+		}
+		if (this.settingsService.identifyFullMatchingImages) {
+			webDetectionResults.fullMatchingImages.forEach((fullMatchingImage: { url: string }) => {
+				fullMatchingImages.push(fullMatchingImage.url);
+			});
+		}
+		if (this.settingsService.identifyPartialMatchingImages) {
+			webDetectionResults.partialMatchingImages.forEach((partialMatchingImage: { url: string }) => {
+				partialMatchingImages.push(partialMatchingImage.url);
+			});
+		}
+		if (this.settingsService.identifyPagesWithMatchingImages) {
+			webDetectionResults.pagesWithMatchingImages.forEach((pageWithMatchingImage: { url: any; pageTitle: any }) => {
+				let newPageWithMatchingImage: PageWithMatchingImage = {
+					url: pageWithMatchingImage.url,
+					pageTitle: pageWithMatchingImage.pageTitle,
+				};
+				pagesWithMatchingImage.push(newPageWithMatchingImage);
+			});
+		}
 
-		webDetectionResults.partialMatchingImages.forEach((partialMatchingImage: { url: string }) => {
-			partialMatchingImages.push(partialMatchingImage.url);
-		});
-		webDetectionResults.pagesWithMatchingImages.forEach((pageWithMatchingImage: { url: any; pageTitle: any }) => {
-			let newPageWithMatchingImage: PageWithMatchingImage = {
-				url: pageWithMatchingImage.url,
-				pageTitle: pageWithMatchingImage.pageTitle,
-			};
-			pagesWithMatchingImage.push(newPageWithMatchingImage);
-		});
-		webDetectionResults.bestGuessLabels.forEach((bestGuessLabel: { label: string }) => {
-			labelDescriptions.push(bestGuessLabel.label);
-		});
+		if (this.settingsService.identifyLabels) {
+			webDetectionResults.bestGuessLabels.forEach((bestGuessLabel: { label: string }) => {
+				labelDescriptions.push(bestGuessLabel.label);
+			});
+		}
 
 		let identifiedImage: IdentifiedImage = {
 			id: file.id,
@@ -213,7 +255,8 @@ export class SidebarComponent {
 
 		for (let file of this.fileHandlerService.getFiles()) {
 			if (file.selected) {
-				this.fileHandlerService.identifiedImages.push(await this.identifyImage(file));
+				let identifiedImage = await this.identifyImage(file);
+				if (identifiedImage) this.fileHandlerService.identifiedImages.push(identifiedImage);
 			}
 		}
 
@@ -240,7 +283,8 @@ export class SidebarComponent {
 		this.fileHandlerService.identifiedImages = [];
 
 		for (let file of this.fileHandlerService.getFiles()) {
-			this.fileHandlerService.identifiedImages.push(await this.identifyImage(file));
+			let identifiedImage = await this.identifyImage(file);
+			if (identifiedImage) this.fileHandlerService.identifiedImages.push(identifiedImage);
 		}
 
 		this.fileHandlerService.identifyAllButtonLoading = false;
@@ -308,5 +352,29 @@ export class SidebarComponent {
 			}
 		}
 		return '';
+	}
+
+	getValueForSafeSeach(rating: string): number {
+		switch (rating) {
+			case 'UNKNOWN': {
+				return 0;
+			}
+			case 'VERY_UNLIKELY': {
+				return 1;
+			}
+			case 'UNLIKELY': {
+				return 2;
+			}
+			case 'POSSIBLE': {
+				return 3;
+			}
+			case 'LIKELY': {
+				return 4;
+			}
+			case 'VERY_LIKELY': {
+				return 5;
+			}
+		}
+		return 0;
 	}
 }

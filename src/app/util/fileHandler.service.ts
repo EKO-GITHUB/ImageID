@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FileHandle } from './dragDrop.directive';
 import { MessageService } from 'primeng/api';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { IdentifiedImage } from '../styles/sidepanel/identifiedImage.component';
+import { IdentifiedImage } from '../components/sidepanel/identifiedImage.component';
 
 @Injectable()
 export class FileHandlerService {
@@ -38,7 +38,6 @@ export class FileHandlerService {
 				file.file.type != 'image/tiff' &&
 				file.file.type != 'image/bmp' &&
 				file.file.type != 'image/gif' &&
-				file.file.type != 'image/bmp' &&
 				file.file.type != 'image/webp' &&
 				file.file.type != 'image/vnd.microsoft.icon'
 			) {

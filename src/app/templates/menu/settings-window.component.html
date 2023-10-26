@@ -1,9 +1,240 @@
 <p-tabView>
 	<p-tabPanel header="Google Cloud Vision">
-		<p>Setting 1 Setting 2</p>
+		<p-fieldset legend="Identify Options">
+			<table>
+				<tbody>
+					<tr>
+						<td><div class="tag">Identify Landmarks?</div></td>
+						<td><p-inputSwitch [(ngModel)]="settingsService.identifyLandmarks"></p-inputSwitch></td>
+					</tr>
+					<tr>
+						<td><div class="tag">Identify Logos?</div></td>
+						<td><p-inputSwitch [(ngModel)]="settingsService.identifyLogos"></p-inputSwitch></td>
+					</tr>
+					<tr>
+						<td><div class="tag">Identify Labels?</div></td>
+						<td><p-inputSwitch [(ngModel)]="settingsService.identifyLabels"></p-inputSwitch></td>
+					</tr>
+					<tr>
+						<td><div class="tag">Identify Localized Objects?</div></td>
+						<td><p-inputSwitch [(ngModel)]="settingsService.identifyLocalizedObjects"></p-inputSwitch></td>
+					</tr>
+					<tr>
+						<td><div class="tag">Identify Safe Search?</div></td>
+						<td><p-inputSwitch [(ngModel)]="settingsService.identifySafeSearch"></p-inputSwitch></td>
+					</tr>
+					<tr>
+						<td><div class="tag">Identify Image Properties?</div></td>
+						<td><p-inputSwitch [(ngModel)]="settingsService.identifyImageProperties"></p-inputSwitch></td>
+					</tr>
+					<tr>
+						<td><div class="tag">Identify Web Detection?</div></td>
+						<td><p-inputSwitch [(ngModel)]="settingsService.identifyWebDetection"></p-inputSwitch></td>
+					</tr>
+					<tr>
+						<td><div class="tag">Identify Full Matching Images?</div></td>
+						<td><p-inputSwitch [(ngModel)]="settingsService.identifyFullMatchingImages"></p-inputSwitch></td>
+					</tr>
+					<tr>
+						<td><div class="tag">Identify Partial Matching Images?</div></td>
+						<td><p-inputSwitch [(ngModel)]="settingsService.identifyPartialMatchingImages"></p-inputSwitch></td>
+					</tr>
+					<tr>
+						<td><div class="tag">Identify Pages with Matching Images?</div></td>
+						<td><p-inputSwitch [(ngModel)]="settingsService.identifyPagesWithMatchingImages"></p-inputSwitch></td>
+					</tr>
+				</tbody>
+			</table>
+		</p-fieldset>
+		<p-fieldset legend="Score Filter">
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<div [ngStyle]="{ 'background-color': settingsService.identifyLandmarks ? '#c298d8' : '#3f4b5b' }" class="tagScore">Minimum Landmark Score</div>
+						</td>
+						<td>
+							<div>
+								<input
+									type="text"
+									[disabled]="!settingsService.identifyLandmarks"
+									pInputText
+									[(ngModel)]="settingsService.identifyLandmarksMinScore"
+									class="w-full"
+								/>
+								<p-slider
+									[disabled]="!settingsService.identifyLandmarks"
+									[min]="0.0"
+									[max]="1.0"
+									[step]="0.1"
+									[(ngModel)]="settingsService.identifyLandmarksMinScore"
+									class="w-full"
+								></p-slider>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div [ngStyle]="{ 'background-color': settingsService.identifyLogos ? '#c298d8' : '#3f4b5b' }" class="tagScore">Minimum Logo Score</div>
+						</td>
+						<td>
+							<div>
+								<input type="text" [disabled]="!settingsService.identifyLogos" pInputText [(ngModel)]="settingsService.identifyLogosMinScore" class="w-full" />
+								<p-slider
+									[disabled]="!settingsService.identifyLogos"
+									[min]="0.0"
+									[max]="1.0"
+									[step]="0.1"
+									[(ngModel)]="settingsService.identifyLogosMinScore"
+									class="w-full"
+								></p-slider>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div [ngStyle]="{ 'background-color': settingsService.identifyLabels ? '#c298d8' : '#3f4b5b' }" class="tagScore">Minimum Label Score</div>
+						</td>
+						<td>
+							<div>
+								<input
+									type="text"
+									[disabled]="!settingsService.identifyLabels"
+									pInputText
+									[(ngModel)]="settingsService.identifyLabelsMinScore"
+									class="w-full"
+								/>
+								<p-slider
+									[disabled]="!settingsService.identifyLabels"
+									[min]="0.0"
+									[max]="1.0"
+									[step]="0.1"
+									[(ngModel)]="settingsService.identifyLabelsMinScore"
+									class="w-full"
+								></p-slider>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div [ngStyle]="{ 'background-color': settingsService.identifyLocalizedObjects ? '#c298d8' : '#3f4b5b' }" class="tagScore">
+								Minimum score to consider the Localized Object
+							</div>
+						</td>
+						<td>
+							<div>
+								<input
+									type="text"
+									[disabled]="!settingsService.identifyLocalizedObjects"
+									pInputText
+									[(ngModel)]="settingsService.identifyLocalizedObjectsMinScore"
+									class="w-full"
+								/>
+								<p-slider
+									[disabled]="!settingsService.identifyLocalizedObjects"
+									[min]="0.0"
+									[max]="1.0"
+									[step]="0.1"
+									[(ngModel)]="settingsService.identifyLocalizedObjectsMinScore"
+									class="w-full"
+								></p-slider>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div [ngStyle]="{ 'background-color': settingsService.identifyImageProperties ? '#c298d8' : '#3f4b5b' }" class="tagScore">
+								Minimum Score for image colors within Image Property
+							</div>
+						</td>
+						<td>
+							<div>
+								<input
+									type="text"
+									[disabled]="!settingsService.identifyImageProperties"
+									pInputText
+									[(ngModel)]="settingsService.identifyImagePropertyColorMinScore"
+									class="w-full"
+								/>
+								<p-slider
+									[disabled]="!settingsService.identifyImageProperties"
+									[min]="0.0"
+									[max]="1.0"
+									[step]="0.1"
+									[(ngModel)]="settingsService.identifyImagePropertyColorMinScore"
+									class="w-full"
+								></p-slider>
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div [ngStyle]="{ 'background-color': settingsService.identifyWebDetection ? '#c298d8' : '#3f4b5b' }" class="tagScore">
+								Minimum Web Detection Score
+							</div>
+						</td>
+						<td>
+							<div>
+								<input
+									type="text"
+									[disabled]="!settingsService.identifyWebDetection"
+									pInputText
+									[(ngModel)]="settingsService.identifyWebDetectionMinScore"
+									class="w-full"
+								/>
+								<p-slider
+									[disabled]="!settingsService.identifyWebDetection"
+									[min]="0.0"
+									[max]="1.0"
+									[step]="0.1"
+									[(ngModel)]="settingsService.identifyWebDetectionMinScore"
+									class="w-full"
+								></p-slider>
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</p-fieldset>
+		<p-fieldset legend="Safe Search Filter">
+			<table>
+				<tbody>
+					<tr>
+						<td><div class="tagScore">Include images with Adult Rating up to</div></td>
+						<td>
+							<p-dropdown [options]="settingsService.safeSearchOptions" [(ngModel)]="settingsService.identifySafeSearchFilterAdultMaxScore"></p-dropdown>
+						</td>
+					</tr>
+					<tr>
+						<td><div class="tagScore">Include images with Violence Rating up to</div></td>
+						<td>
+							<p-dropdown [options]="settingsService.safeSearchOptions" [(ngModel)]="settingsService.identifySafeSearchFilterViolenceMaxScore"></p-dropdown>
+						</td>
+					</tr>
+					<tr>
+						<td><div class="tagScore">Include images with Racy Rating up to</div></td>
+						<td>
+							<p-dropdown [options]="settingsService.safeSearchOptions" [(ngModel)]="settingsService.identifySafeSearchFilterRacyMaxScore"></p-dropdown>
+						</td>
+					</tr>
+					<tr>
+						<td><div class="tagScore">Include images with Spoof Rating up to</div></td>
+						<td>
+							<p-dropdown [options]="settingsService.safeSearchOptions" [(ngModel)]="settingsService.identifySafeSearchFilterSpoofMaxScore"></p-dropdown>
+						</td>
+					</tr>
+					<tr>
+						<td><div class="tagScore">Include images with Medical Rating up to</div></td>
+						<td>
+							<p-dropdown [options]="settingsService.safeSearchOptions" [(ngModel)]="settingsService.identifySafeSearchFilterMedicalMaxScore"></p-dropdown>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</p-fieldset>
 	</p-tabPanel>
 	<p-tabPanel header="List View">
 		<p>Setting 3</p>
 	</p-tabPanel>
 </p-tabView>
-<p-button class="p-button-success">Save</p-button>
+<p-button class="p-button-success" (onClick)="saveAllSettings()">Save</p-button>

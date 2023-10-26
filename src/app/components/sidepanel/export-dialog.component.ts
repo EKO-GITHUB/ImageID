@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FileHandlerService } from 'src/app/util/fileHandler.service';
-import { IdentifiedImage, ImageProperties, Landmark, Logo, PageWithMatchingImage, SafeSearch } from 'src/app/styles/sidepanel/identifiedImage.component';
+import { IdentifiedImage, ImageProperties, Landmark, Logo, PageWithMatchingImage, SafeSearch } from 'src/app/components/sidepanel/identifiedImage.component';
 import { MessageService } from 'primeng/api';
 
 @Component({
