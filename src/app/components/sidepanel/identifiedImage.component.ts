@@ -1,16 +1,18 @@
 export interface IdentifiedImage {
-	id: number;
-	fileName: string;
-	landmarks: Landmark[];
-	logos: Logo[];
-	labels: string[];
-	localizedObjects: string[];
-	safeSearch: SafeSearch[];
-	imageProperties: ImageProperties[];
-	webDetection: string[];
-	fullMatchingImages: string[];
-	partialMatchingImages: string[];
-	pagesWithMatchingImage: PageWithMatchingImage[];
+	identifiedImage: {
+		id: number;
+		fileName: string;
+		landmarks: Landmark[];
+		logos: Logo[];
+		labels: string[];
+		localizedObjects: string[];
+		safeSearch: SafeSearch[];
+		imageProperties: ImageProperties[];
+		webDetection: string[];
+		fullMatchingImages: string[];
+		partialMatchingImages: string[];
+		pagesWithMatchingImage: PageWithMatchingImage[];
+	};
 }
 
 export interface SafeSearch {

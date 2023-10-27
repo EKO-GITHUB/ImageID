@@ -1,10 +1,13 @@
 <div class="card flex justify-content-center w-100">
 	<p-accordion>
-		<p-accordionTab *ngFor="let identifiedImage of fileHandlerService.identifiedImages" [header]="identifiedImage.id + ' ' + identifiedImage.fileName">
+		<p-accordionTab
+			*ngFor="let identifiedImage of fileHandlerService.identifiedImages"
+			[header]="identifiedImage.identifiedImage.id + ' ' + identifiedImage.identifiedImage.fileName"
+		>
 			<p-accordion>
-				<div *ngIf="identifiedImage.landmarks.length > 0">
+				<div *ngIf="identifiedImage.identifiedImage.landmarks.length > 0">
 					<p-accordionTab header="Landmarks" class="w-100">
-						<p-table [value]="identifiedImage.landmarks" [ngStyle]="{ width: '100%' }">
+						<p-table [value]="identifiedImage.identifiedImage.landmarks" [ngStyle]="{ width: '100%' }">
 							<ng-template pTemplate="header">
 								<tr>
 									<th>Description</th>
@@ -28,9 +31,9 @@
 						</p-table>
 					</p-accordionTab>
 				</div>
-				<div *ngIf="identifiedImage.logos.length > 0">
+				<div *ngIf="identifiedImage.identifiedImage.logos.length > 0">
 					<p-accordionTab header="Logos" class="w-100">
-						<p-table [value]="identifiedImage.logos" [ngStyle]="{ width: '100%' }">
+						<p-table [value]="identifiedImage.identifiedImage.logos" [ngStyle]="{ width: '100%' }">
 							<ng-template pTemplate="header">
 								<tr>
 									<th>Description</th>
@@ -50,25 +53,25 @@
 						</p-table>
 					</p-accordionTab>
 				</div>
-				<div *ngIf="identifiedImage.labels.length > 0">
+				<div *ngIf="identifiedImage.identifiedImage.labels.length > 0">
 					<p-accordionTab header="Labels" class="w-100">
-						<div *ngFor="let label of identifiedImage.labels" class="tagDiv">
+						<div *ngFor="let label of identifiedImage.identifiedImage.labels" class="tagDiv">
 							<div>{{ label }}</div>
 							<p-button icon="pi pi-trash" severity="danger" (onClick)="removeLabel(identifiedImage, label)" />
 						</div>
 					</p-accordionTab>
 				</div>
-				<div *ngIf="identifiedImage.localizedObjects.length > 0">
+				<div *ngIf="identifiedImage.identifiedImage.localizedObjects.length > 0">
 					<p-accordionTab header="Localized Objects" class="w-100">
-						<div *ngFor="let localizedObject of identifiedImage.localizedObjects" class="tagDiv">
+						<div *ngFor="let localizedObject of identifiedImage.identifiedImage.localizedObjects" class="tagDiv">
 							<div>{{ localizedObject }}</div>
 							<p-button icon="pi pi-trash" severity="danger" (onClick)="removeLocalizedObject(identifiedImage, localizedObject)" />
 						</div>
 					</p-accordionTab>
 				</div>
-				<div *ngIf="identifiedImage.safeSearch.length > 0">
+				<div *ngIf="identifiedImage.identifiedImage.safeSearch.length > 0">
 					<p-accordionTab header="Safe Search" class="w-100">
-						<p-table [value]="identifiedImage.safeSearch" [ngStyle]="{ width: '100%' }">
+						<p-table [value]="identifiedImage.identifiedImage.safeSearch" [ngStyle]="{ width: '100%' }">
 							<ng-template pTemplate="header">
 								<tr>
 									<th>Category</th>
@@ -90,9 +93,9 @@
 						</p-table>
 					</p-accordionTab>
 				</div>
-				<div *ngIf="identifiedImage.imageProperties.length > 0">
+				<div *ngIf="identifiedImage.identifiedImage.imageProperties.length > 0">
 					<p-accordionTab header="Image Colors" class="w-100">
-						<p-table [value]="identifiedImage.imageProperties" [ngStyle]="{ width: '100%' }">
+						<p-table [value]="identifiedImage.identifiedImage.imageProperties" [ngStyle]="{ width: '100%' }">
 							<ng-template pTemplate="header">
 								<tr>
 									<th></th>
@@ -114,17 +117,17 @@
 						</p-table>
 					</p-accordionTab>
 				</div>
-				<div *ngIf="identifiedImage.webDetection.length > 0">
+				<div *ngIf="identifiedImage.identifiedImage.webDetection.length > 0">
 					<p-accordionTab header="Web Detection" class="w-100">
-						<div *ngFor="let webDetection of identifiedImage.webDetection" class="tagDiv">
+						<div *ngFor="let webDetection of identifiedImage.identifiedImage.webDetection" class="tagDiv">
 							<div>{{ webDetection }}</div>
 							<p-button icon="pi pi-trash" severity="danger" (onClick)="removeWebDetection(identifiedImage, webDetection)" />
 						</div>
 					</p-accordionTab>
 				</div>
-				<div *ngIf="identifiedImage.fullMatchingImages.length > 0">
+				<div *ngIf="identifiedImage.identifiedImage.fullMatchingImages.length > 0">
 					<p-accordionTab header="Full Matching Images" class="w-100">
-						<p-table [value]="identifiedImage.fullMatchingImages" [ngStyle]="{ width: '100%' }">
+						<p-table [value]="identifiedImage.identifiedImage.fullMatchingImages" [ngStyle]="{ width: '100%' }">
 							<ng-template pTemplate="header">
 								<tr>
 									<th>URL</th>
@@ -144,9 +147,9 @@
 						</p-table>
 					</p-accordionTab>
 				</div>
-				<div *ngIf="identifiedImage.partialMatchingImages.length > 0">
+				<div *ngIf="identifiedImage.identifiedImage.partialMatchingImages.length > 0">
 					<p-accordionTab header="Partial Matching Images" class="w-100">
-						<p-table [value]="identifiedImage.partialMatchingImages" [ngStyle]="{ width: '100%' }">
+						<p-table [value]="identifiedImage.identifiedImage.partialMatchingImages" [ngStyle]="{ width: '100%' }">
 							<ng-template pTemplate="header">
 								<tr>
 									<th>URL</th>
@@ -166,9 +169,9 @@
 						</p-table>
 					</p-accordionTab>
 				</div>
-				<div *ngIf="identifiedImage.pagesWithMatchingImage.length > 0">
+				<div *ngIf="identifiedImage.identifiedImage.pagesWithMatchingImage.length > 0">
 					<p-accordionTab header="Pages with Matching Images" class="w-100">
-						<p-table [value]="identifiedImage.pagesWithMatchingImage" [ngStyle]="{ width: '100%' }">
+						<p-table [value]="identifiedImage.identifiedImage.pagesWithMatchingImage" [ngStyle]="{ width: '100%' }">
 							<ng-template pTemplate="header">
 								<tr>
 									<th>URL</th>

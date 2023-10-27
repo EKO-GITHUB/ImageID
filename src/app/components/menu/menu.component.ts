@@ -105,10 +105,6 @@ export class MenuComponent implements OnInit, OnDestroy {
 						icon: 'pi pi-github',
 						command: () => this.openGitLabRepository(),
 					},
-					{
-						label: 'Keyboard shortcuts',
-						icon: 'pi pi-chevron-right',
-					},
 				],
 			},
 		];

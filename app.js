@@ -1,5 +1,7 @@
 const { app, BrowserWindow } = require("electron");
 const contextMenu = require("electron-context-menu");
+const ElectronStore = require("electron-store");
+ElectronStore.initRenderer();
 
 let appWindow;
 

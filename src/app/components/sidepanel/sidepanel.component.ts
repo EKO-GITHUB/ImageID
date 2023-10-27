@@ -7,6 +7,7 @@ import { ExportDialogComponent } from './export-dialog.component';
 import { IdentifiedImage, ImageProperties, Landmark, Logo, PageWithMatchingImage, SafeSearch } from 'src/app/components/sidepanel/identifiedImage.component';
 import { FileHandle } from 'src/app/util/dragDrop.directive';
 import { SettingsService } from 'src/app/util/settingsService.service';
+import { FileSaverService } from 'ngx-filesaver';
 
 @Component({
 	selector: 'sidepanel',
@@ -23,22 +24,23 @@ export class SidebarComponent {
 		public fileHandlerService: FileHandlerService,
 		public dialogService: DialogService,
 		public messageService: MessageService,
-		public settingsService: SettingsService
+		public settingsService: SettingsService,
+		private fileSaverService: FileSaverService
 	) {
 		let vision = window.require('@google-cloud/vision');
 		this.client = new vision.ImageAnnotatorClient();
 		this.exportResultsItems = [
 			{
 				label: 'Export as XML',
-				command: () => {},
+				command: () => {
+					this.showFileSavePromptXML();
+				},
 			},
 			{
 				label: 'Export as JSON',
-				command: () => {},
-			},
-			{
-				label: 'Export as CSV',
-				command: () => {},
+				command: () => {
+					this.showFileSavePromptJSON();
+				},
 			},
 		];
 	}
@@ -129,12 +131,6 @@ export class SidebarComponent {
 
 		//safeSearch
 		let safeSearch: SafeSearch[] = [];
-
-		console.log(this.settingsService.identifySafeSearchFilterAdultMaxScore);
-		console.log(this.settingsService.identifySafeSearchFilterViolenceMaxScore);
-		console.log(this.settingsService.identifySafeSearchFilterRacyMaxScore);
-		console.log(this.settingsService.identifySafeSearchFilterMedicalMaxScore);
-		console.log(this.settingsService.identifySafeSearchFilterSpoofMaxScore);
 		if (this.settingsService.identifySafeSearch) {
 			if (
 				this.getValueForSafeSeach(safeSearchResults.adult) > this.getValueForSafeSeach(this.settingsService.identifySafeSearchFilterAdultMaxScore) ||
@@ -225,18 +221,20 @@ export class SidebarComponent {
 		}
 
 		let identifiedImage: IdentifiedImage = {
-			id: file.id,
-			fileName: file.file.name,
-			landmarks: landMarks,
-			logos: logos,
-			labels: labelDescriptions,
-			localizedObjects: localizedObjects,
-			safeSearch: safeSearch,
-			imageProperties: imageProperties,
-			webDetection: webDetectionDescriptions,
-			fullMatchingImages: fullMatchingImages,
-			partialMatchingImages: partialMatchingImages,
-			pagesWithMatchingImage: pagesWithMatchingImage,
+			identifiedImage: {
+				id: file.id,
+				fileName: file.file.name,
+				landmarks: landMarks,
+				logos: logos,
+				labels: labelDescriptions,
+				localizedObjects: localizedObjects,
+				safeSearch: safeSearch,
+				imageProperties: imageProperties,
+				webDetection: webDetectionDescriptions,
+				fullMatchingImages: fullMatchingImages,
+				partialMatchingImages: partialMatchingImages,
+				pagesWithMatchingImage: pagesWithMatchingImage,
+			},
 		};
 
 		return identifiedImage;
@@ -341,12 +339,13 @@ export class SidebarComponent {
 			case 'UNLIKELY': {
 				return '#0095ff';
 			}
-			case 'POSSIBLE': {
-				return '#8900cf';
-			}
 			case 'LIKELY': {
 				return 'orange';
 			}
+			case 'POSSIBLE': {
+				return '#8900cf';
+			}
+
 			case 'VERY_LIKELY': {
 				return 'red';
 			}
@@ -376,5 +375,30 @@ export class SidebarComponent {
 			}
 		}
 		return 0;
+	}
+
+	showFileSavePromptJSON() {
+		let fileName = 'results.json';
+		let fileType = this.fileSaverService.genType(fileName);
+		let content = JSON.stringify(this.fileHandlerService.identifiedImages);
+		let contentBytes = new TextEncoder().encode(content);
+		let contentBlob = new Blob([contentBytes], {
+			type: 'application/json;charset=utf-8',
+		});
+		let txtBlob = new Blob([contentBlob], { type: fileType });
+		this.fileSaverService.save(txtBlob, fileName);
+	}
+
+	showFileSavePromptXML() {
+		let fileName = 'results.xml';
+		let fileType = this.fileSaverService.genType(fileName);
+		let builder = window.require('xmlbuilder');
+		let content = builder.create('root').ele(this.fileHandlerService.identifiedImages).end({ pretty: false });
+		let contentBytes = new TextEncoder().encode(content);
+		let contentBlob = new Blob([contentBytes], {
+			type: 'application/xml;charset=utf-8',
+		});
+		let txtBlob = new Blob([contentBlob], { type: fileType });
+		this.fileSaverService.save(txtBlob, fileName);
 	}
 }

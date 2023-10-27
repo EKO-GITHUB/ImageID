@@ -97,6 +97,7 @@ import { MessageService } from 'primeng/api';
 import { DialogService } from 'primeng/dynamicdialog';
 import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 import { DragDirective } from './util/dragDrop.directive';
+import { FileSaverModule } from 'ngx-filesaver';
 
 // own Components
 import { AppComponent } from './components/app.component';
@@ -208,6 +209,7 @@ import { SettingsService } from './util/settingsService.service';
 		CardModule,
 		RouterModule.forRoot([{ path: '', component: AppComponent }]),
 		NgxExtendedPdfViewerModule,
+		FileSaverModule,
 	],
 	declarations: [
 		AppComponent,

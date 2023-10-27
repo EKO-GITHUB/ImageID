@@ -189,6 +189,5 @@ export class SettingsService {
 		this.storage.set('identifySafeSearchFilterRacyMaxScore', this.identifySafeSearchFilterRacyMaxScore);
 		this.storage.set('identifySafeSearchFilterSpoofMaxScore', this.identifySafeSearchFilterSpoofMaxScore);
 		this.storage.set('identifySafeSearchFilterMedicalMaxScore', this.identifySafeSearchFilterMedicalMaxScore);
-		console.log(JSON.stringify(this.storage, null, 4));
 	}
 }
