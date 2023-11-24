@@ -29,6 +29,7 @@
 		"@angular/router": "^16.2.0",
 		"@google-cloud/vision": "^4.0.2",
 		"@types/lodash": "^4.14.200",
+		"canvas": "github:Automattic/node-canvas",
 		"chart.js": "^4.4.0",
 		"crypto-browserify": "^3.12.0",
 		"electron-context-menu": "^3.6.1",
